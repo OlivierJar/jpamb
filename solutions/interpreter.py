@@ -10,19 +10,20 @@ logger.add(sys.stderr, format="[{level}] {message}")
 
 methodid, input = jpamb.getcase()
 
-
+#Progrmam Counter
 @dataclass
 class PC:
     method: jvm.AbsMethodID
     offset: int
 
+    #In-place add
     def __iadd__(self, delta):
         self.offset += delta
         return self
-
+    #Add
     def __add__(self, delta):
         return PC(self.method, self.offset + delta)
-
+    #String representation
     def __str__(self):
         return f"{self.method}:{self.offset}"
 
@@ -31,7 +32,7 @@ class PC:
 class Bytecode:
     suite: jpamb.Suite
     methods: dict[jvm.AbsMethodID, list[jvm.Opcode]]
-
+    #Get opcode at program counter
     def __getitem__(self, pc: PC) -> jvm.Opcode:
         try:
             opcodes = self.methods[pc.method]
