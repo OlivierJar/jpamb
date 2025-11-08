@@ -92,6 +92,8 @@ bc = Bytecode(suite, dict())
 
 
 # Define the Frame class to represent a method frame
+
+
 @dataclass
 class Frame:
     locals: dict[int, jvm.Value]
@@ -102,3 +104,42 @@ class Frame:
         # String representation of the frame
         locals = ", ".join(f"{k}:{v}" for k, v in sorted(self.locals.items()))
         return f"<{{{locals}}}, {self.stack}, {self.pc}>"
+
+@dataclass
+class State:
+    heap: dict[int, jvm.Value]
+    frames: Stack[Frame]
+
+def step(state: State) -> State | str:
+    frame = state.frames.peek() # Get the current frame
+    match bc[frame.pc]:
+        case jvm.Push(value=v):
+            frame.stack.push(v)
+            frame.pc += 1
+            return state
+        case jvm.Load(type=jvm.Int(), index=n):
+            v = frame.locals[n]
+            assert v.type is jvm.Int()
+            frame.stack.push(v)
+            frame.pc += 1
+            return state
+        case jvm.Return(type=jvm.Int()):
+            v1 = frame.stack.pop()
+            state.frames.pop()
+            if state.frames:
+                frame = state.frames.peek()
+                frame.stack.push(v1)
+                frame.pc += 1
+                return state
+            else:
+                return "ok"
+        case jvm.Binary(type=jvm.Int(), operant=jvm.BinaryOpr.Div):
+            v2, v1 = frame.stack.pop(), frame.stack.pop()
+            assert v1.type is jvm.Int(), f"expected int, but got {v1}"
+            assert v2.type is jvm.Int(), f"expected int, but got {v2}"
+            if v2 == 0:
+                return "divide by zero"
+
+            frame.stack.push(jvm.Value.int(v1.value // v2.value))
+            frame.pc += 1
+            return state
