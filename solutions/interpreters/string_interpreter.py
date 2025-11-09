@@ -8,6 +8,12 @@ This interpreter extends the basic JVM interpreter with:
 3. SQL injection vulnerability detection
 4. Abstract string domain for symbolic representation
 
+Usage:
+    python string_interpreter.py "ClassName.methodName:(params)returnType" "(arg1, arg2, ...)"
+    
+Example:
+
+    python string_interpreter.py "jpamb.cases.SQLTest.executeQuery:(Ljava/lang/String;)V" "(\"admin\")"
 """
 
 import sys
@@ -19,232 +25,35 @@ from enum import Enum
 import json
 import re
 
-# Ensure we're using the jpamb package from lib
 try:
     from jpamb import jvm
     from jpamb.jvm import opcode
+    from jpamb.jvm.base import (
+        StringProvenance, AbstractString, SQLQuery, EnhancedValue,
+        Stack, PC, Frame
+    )
     from jpamb.model import Suite, Input
 except ImportError:
-    print("Error: jpamb package not found.", file=sys.stderr)
-    print("Please run with: cd lib && uv run python ../solutions/string_interpreter.py <args>", file=sys.stderr)
+    print("Error: jpamb was not found", file=sys.stderr)
+    print("Please run with: cd solutions/interpreters && uv run python string_interpreter.py <args>", file=sys.stderr)
     sys.exit(1)
 
 
-class StringProvenance(Enum):
-    """Tracks the origin and trustworthiness of string data"""
-    CONSTANT = "constant"
-    USER_INPUT = "user_input"
-    COMPUTED = "computed"
-    UNKNOWN = "unknown"
-
-
-@dataclass(frozen=True)
-class AbstractString:
-    """
-    Abstract representation of a string value with provenance tracking.
-    
-    This enables symbolic string representation for detecting SQL injection
-    and other string-based vulnerabilities.
-    """
-    value: Optional[str]
-    provenance: StringProvenance
-    tainted: bool
-    operations: tuple[str, ...] = field(default_factory=tuple)
-    
-    @staticmethod
-    def constant(s: str) -> 'AbstractString':
-        return AbstractString(s, StringProvenance.CONSTANT, False, ())
-    
-    @staticmethod
-    def user_input(s: Optional[str] = None) -> 'AbstractString':
-        return AbstractString(s, StringProvenance.USER_INPUT, True, ())
-    
-    @staticmethod
-    def unknown() -> 'AbstractString':
-        return AbstractString(None, StringProvenance.UNKNOWN, True, ())
-    
-    def concat(self, other: 'AbstractString') -> 'AbstractString':
-        new_value = None
-        if self.value is not None and other.value is not None:
-            new_value = self.value + other.value
-        
-        tainted = self.tainted or other.tainted
-        ops = self.operations + other.operations + (f"concat({self.value}, {other.value})",)
-        
-        return AbstractString(
-            new_value,
-            StringProvenance.COMPUTED,
-            tainted,
-            ops
-        )
-    
-    def substring(self, start: int, end: Optional[int] = None) -> 'AbstractString':
-        new_value = None
-        if self.value is not None:
-            new_value = self.value[start:end]
-        
-        ops = self.operations + (f"substring({start}, {end})",)
-        
-        return AbstractString(
-            new_value,
-            StringProvenance.COMPUTED,
-            self.tainted,
-            ops
-        )
-    
-    def __str__(self):
-        taint_marker = "⚠️ TAINTED" if self.tainted else "✓ SAFE"
-        value_str = f'"{self.value}"' if self.value else "<unknown>"
-        return f"{value_str} [{taint_marker}]"
-
-
-@dataclass
-class SQLQuery:
-    """Represents a SQL query being constructed"""
-    query_string: AbstractString
-    is_parameterized: bool = False
-    parameters: list[Any] = field(default_factory=list)
-    
-    def is_vulnerable(self) -> bool:
-        return self.query_string.tainted and not self.is_parameterized
-    
-    def get_vulnerability_details(self) -> str:
-        if not self.is_vulnerable():
-            return "No SQL injection vulnerability detected."
-        
-        details = [
-            "🚨 SQL INJECTION VULNERABILITY DETECTED 🚨",
-            f"Query: {self.query_string}",
-            f"Operations: {' -> '.join(self.query_string.operations)}",
-            "",
-            "Explanation:",
-            "  User input is directly concatenated into SQL query without parameterization.",
-            "  This allows attackers to inject malicious SQL code.",
-            "",
-            "Example attack:",
-            "  Input: ' OR '1'='1",
-            f"  Resulting query: {self.query_string.value}",
-            "",
-            "Fix: Use prepared statements with parameterized queries.",
-        ]
-        return "\n".join(details)
-
-
-@dataclass
-class EnhancedValue:
-    """
-    Wraps jvm.Value with additional string analysis information
-    """
-    jvm_value: jvm.Value
-    abstract_string: Optional[AbstractString] = None
-    
-    @staticmethod
-    def from_jvm(v: jvm.Value) -> 'EnhancedValue':
-        abs_str = None
-        
-        if isinstance(v.type, jvm.Object) and "String" in str(v.type.classname):
-            if isinstance(v.value, str):
-                abs_str = AbstractString.constant(v.value)
-            else:
-                abs_str = AbstractString.unknown()
-        
-        return EnhancedValue(v, abs_str)
-    
-    @staticmethod
-    def string_constant(s: str) -> 'EnhancedValue':
-        return EnhancedValue(
-            jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), s),
-            AbstractString.constant(s)
-        )
-    
-    @staticmethod
-    def string_input(s: str) -> 'EnhancedValue':
-        return EnhancedValue(
-            jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), s),
-            AbstractString.user_input(s)
-        )
-    
-    def is_string(self) -> bool:
-        return self.abstract_string is not None
-    
-    def __str__(self):
-        if self.abstract_string:
-            return f"{self.jvm_value.value} [{self.abstract_string.provenance.value}]"
-        return str(self.jvm_value)
-
-
-@dataclass
-class Stack:
-    """Operand stack with enhanced values"""
-    items: list[EnhancedValue] = field(default_factory=list)
-
-    def __bool__(self) -> bool:
-        return len(self.items) > 0
-
-    @classmethod
-    def empty(cls):
-        return cls([])
-
-    def peek(self) -> EnhancedValue:
-        if not self.items:
-            raise RuntimeError("Stack underflow")
-        return self.items[-1]
-
-    def pop(self) -> EnhancedValue:
-        if not self.items:
-            raise RuntimeError("Stack underflow")
-        return self.items.pop(-1)
-
-    def push(self, value: EnhancedValue):
-        self.items.append(value)
-        return self
-
-    def __str__(self):
-        if not self:
-            return "ε"
-        return "".join(f"({v})" for v in self.items)
-
-
-@dataclass
-class PC:
-    """Program Counter"""
-    method: jvm.Absolute[jvm.MethodID]
-    offset: int
-
-    def __iadd__(self, delta):
-        self.offset += delta
-        return self
-
-    def __add__(self, delta):
-        return PC(self.method, self.offset + delta)
-
-    def jump_to(self, target_offset: int):
-        self.offset = target_offset
-
-    def __str__(self):
-        return f"{self.method}:{self.offset}"
-
-
-@dataclass
-class Frame:
-    """Stack frame with enhanced tracking"""
-    locals: dict[int, EnhancedValue]
-    stack: Stack
-    pc: PC
-
-    def __str__(self):
-        locals_str = ", ".join(f"{k}:{v}" for k, v in sorted(self.locals.items()))
-        return f"<{{{locals_str}}}, {self.stack}, {self.pc}>"
+# ============================================================================
+# Enhanced State Components (Interpreter-specific)
+# ============================================================================
 
 
 @dataclass
 class Bytecode:
     """Bytecode context"""
+    
     suite: Suite
     methods: dict[jvm.Absolute[jvm.MethodID], list[opcode.Opcode]] = field(default_factory=dict)
     offset_maps: dict[jvm.Absolute[jvm.MethodID], dict[int, int]] = field(default_factory=dict)
 
     def __getitem__(self, pc: PC) -> opcode.Opcode:
+        """Get bytecode instruction at PC"""
         if pc.method not in self.methods:
             opcodes = list(self.suite.method_opcodes(pc.method))
             self.methods[pc.method] = opcodes
@@ -256,6 +65,7 @@ class Bytecode:
         return self.methods[pc.method][pc.offset]
     
     def offset_to_index(self, method: jvm.Absolute[jvm.MethodID], offset: int) -> int:
+        """Convert bytecode offset to list index"""
         if method not in self.offset_maps:
             opcodes = list(self.suite.method_opcodes(method))
             self.methods[method] = opcodes
@@ -270,29 +80,36 @@ class Bytecode:
 @dataclass
 class State:
     """Complete program state with SQL tracking"""
+    
     heap: dict[int, EnhancedValue]
-    frames: Stack
+    frames: Stack[EnhancedValue]
     next_addr: int = 1000
     sql_queries: list[SQLQuery] = field(default_factory=list)
     vulnerabilities: list[str] = field(default_factory=list)
 
     def alloc(self, value: EnhancedValue) -> int:
+        """Allocate value on heap, return reference"""
         addr = self.next_addr
         self.next_addr += 1
         self.heap[addr] = value
         return addr
     
-    def record_sql_query(self, query: SQLQuery):
+    def record_sql_query(self, query: SQLQuery) -> None:
+        """Record a SQL query for analysis"""
         self.sql_queries.append(query)
         if query.is_vulnerable():
             vuln = query.get_vulnerability_details()
             self.vulnerabilities.append(vuln)
 
-    def __str__(self):
+    def __str__(self) -> str:
         if not self.frames:
             return "<empty>"
         return f"State(frames={len(self.frames.items)}, heap={len(self.heap)}, queries={len(self.sql_queries)})"
 
+
+# ============================================================================
+# String-Aware Interpreter
+# ============================================================================
 
 class StringInterpreter:
     """
@@ -306,6 +123,7 @@ class StringInterpreter:
         self.step_count = 0
 
     def step(self, state: State) -> Union[State, str]:
+        """Single step execution"""
         if not state.frames:
             return "ok"
 
@@ -324,6 +142,7 @@ class StringInterpreter:
             return f"error: {e}"
 
     def _execute_opcode(self, op: opcode.Opcode, state: State) -> Optional[Union[State, str]]:
+        """Execute single opcode with string tracking"""
         frame = state.frames.peek()
 
         match op:
@@ -533,25 +352,30 @@ class StringInterpreter:
         return None
 
     def _handle_method_invocation(self, op, state: State) -> Optional[str]:
+        """Handle method invocations with special handling for string and SQL operations"""
         frame = state.frames.peek()
         method = op.method
         num_args = len(method.extension.params)
         
+        # Pop arguments
         args = []
         for _ in range(num_args):
             args.insert(0, frame.stack.pop())
         
+        # Pop receiver for non-static
         receiver = None
         if not isinstance(op, opcode.InvokeStatic):
             receiver = frame.stack.pop()
             if receiver.jvm_value.value is None:
                 return "null pointer"
         
+        # Special handling for string operations
         method_name = method.extension.name
         class_name = str(method.classname)
         
         if "StringBuilder" in class_name or "StringBuffer" in class_name:
             if method_name == "append" and len(args) > 0:
+                # String concatenation
                 if receiver and receiver.is_string() and args[0].is_string():
                     new_abs_str = receiver.abstract_string.concat(args[0].abstract_string)
                     result = EnhancedValue(
@@ -561,12 +385,14 @@ class StringInterpreter:
                     frame.stack.push(result)
                     return None
             elif method_name == "toString":
+                # Convert to string
                 if receiver:
                     frame.stack.push(receiver)
                     return None
         
         if "String" in class_name:
             if method_name == "concat" and len(args) > 0:
+                # String concatenation
                 if receiver and receiver.is_string() and args[0].is_string():
                     new_abs_str = receiver.abstract_string.concat(args[0].abstract_string)
                     result = EnhancedValue(
@@ -577,6 +403,7 @@ class StringInterpreter:
                     frame.stack.push(result)
                     return None
             elif method_name == "substring":
+                # Substring extraction
                 if receiver and receiver.is_string():
                     start = args[0].jvm_value.value if len(args) > 0 else 0
                     end = args[1].jvm_value.value if len(args) > 1 else None
@@ -589,6 +416,7 @@ class StringInterpreter:
                     frame.stack.push(result)
                     return None
         
+        # SQL injection detection
         if self.detect_sql and ("Statement" in class_name or "Connection" in class_name):
             if method_name in ["executeQuery", "executeUpdate", "execute", "prepareStatement"]:
                 if len(args) > 0 and args[0].is_string():
@@ -603,12 +431,14 @@ class StringInterpreter:
                             print(f"\n{query.get_vulnerability_details()}", file=sys.stderr)
                         return "sql injection vulnerability"
         
+        # Default: push return value if not void
         if method.extension.return_type is not None:
             frame.stack.push(self._default_value(method.extension.return_type))
         
         return None
 
     def _default_value(self, t: jvm.Type) -> EnhancedValue:
+        """Get default value for type"""
         match t:
             case jvm.Int() | jvm.Byte() | jvm.Short() | jvm.Char():
                 return EnhancedValue.from_jvm(jvm.Value.int(0))
@@ -688,6 +518,8 @@ class StringInterpreter:
         return "timeout", state
 
 
+# Main entry point
+
 def main():
     if len(sys.argv) < 3:
         print("Usage: python string_interpreter.py <method> <input> [--verbose] [--no-sql-check]", file=sys.stderr)
@@ -704,12 +536,14 @@ def main():
     
     suite = Suite(workspace)
     
+    # Parse method
     try:
         methodid = jvm.Absolute.decode(method_str, jvm.MethodID.decode)
     except Exception as e:
         print(f"Error parsing method: {e}", file=sys.stderr)
         sys.exit(1)
     
+    # Parse input
     try:
         input_obj = Input.decode(input_str)
         args = list(input_obj.values)
@@ -717,14 +551,18 @@ def main():
         print(f"Error parsing input: {e}", file=sys.stderr)
         sys.exit(1)
     
+    # Create interpreter and execute
     interp = StringInterpreter(suite, verbose=verbose, detect_sql=detect_sql)
     result, final_state = interp.execute(methodid, args)
     
+    # Print result
     print(result)
     
+    # Print vulnerability summary if any found
     if final_state.vulnerabilities and not verbose:
         print(f"\n⚠️  {len(final_state.vulnerabilities)} SQL injection vulnerabilities detected", file=sys.stderr)
     
+    # Exit with appropriate code
     sys.exit(0 if result == "ok" else 1)
 
 
