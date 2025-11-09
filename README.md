@@ -5,81 +5,7 @@
 JPAMB is a collection of small Java programs with various behaviors (crashes, infinite loops, normal completion). Your task is to build a program analysis tool that can predict what will happen when these programs run.
 
 Think of it like a fortune teller for code: given a Java method, can your analysis predict if it will crash, run forever, or complete successfully?
-## Project Structure
-```plaintext
-jpamb/
-├── decompiled/              # Contains pre-decompiled JVM bytecode files in JSON format
-│   └── Arrays.json          # JSON representation of Arrays.java bytecode
-│   └── Calls.json           # JSON representation of Calls.java bytecode
-│   └── Loops.json           # JSON representation of Loops.java bytecode
-│   └── Simple.json          # JSON representation of Simple.java bytecode
-│   └── Tricky.json          # JSON representation of Tricky.java bytecode
-├── jpamb/                   # Core Python package for the project
-│   ├── __init__.py          # Initializes the jpamb package and provides utility functions
-│   ├── cli.py               # Implements the command-line interface for the project
-│   ├── logger.py            # Provides consistent logging utilities
-│   ├── model.py             # Defines the core data model for cases and the Suite class
-│   ├── stats.py             # Contains functionality for analyzing and presenting statistics
-│   ├── timer.c              # C implementation for timing utilities
-├── solutions/               # Example analyzers for the project
-│   ├── apriori.py           # Implements a statistical pattern-based analyzer
-│   ├── bytecoder.py         # Analyzes JVM bytecode for assertion errors
-│   ├── cheater.py           # A "cheating" analyzer using precomputed results
-│   ├── my_analyzer.py       # A basic Python analyzer template
-│   └── syntaxer.py          # Uses Tree-sitter for syntactic analysis of Java code
-│ 
-├── src/                     # Java source code for test cases
-│   └── main/
-│       └── java/
-│           ├── jpamb/
-│           │   ├── cases/   # Contains Java test cases with various behaviors
-│           │   │   ├── Arrays.java          # Test cases for array operations
-│           │   │   ├── Calls.java           # Test cases for method calls
-│           │   │   ├── Loops.java           # Test cases for loops
-│           │   │   ├── Simple.java          # Simple test cases (e.g., divide by zero, assertions)
-│           │   │   └── Tricky.java          # More complex test cases (e.g., Collatz conjecture)
-│           │   └── utils/
-│           │       ├── Case.java            # Defines the Case class
-│           │       ├── CaseContent.java     # Defines the CaseContent class and ResultType enum
-│           │       ├── Cases.java           # Manages multiple test cases
-│           │       ├── InputParser.java     # Parses input for test cases
-│           │       └── Tag.java             # Defines the Tag class
-│           └──Runtime.java                  # Main runtime class for Java test cases
-├── stats/                   # Statistical data for analyzers
-│   ├── distribution.csv     # Distribution data for statistical analysis
-│   └── cases.txt            # Lists all test cases with their expected outcomes
-├── target/                  # Compiled Java class files and build artifacts
-│   └── classes/
-│           ├── jpamb/
-│           │   ├── cases/   # Contains compiled Java test cases
-│           │   │   ├── Arrays.class         # Compiled bytecode for Arrays.java
-│           │   │   ├── Calls.class          # Compiled bytecode for Calls.java
-│           │   │   ├── Loops.class          # Compiled bytecode for Loops.java
-│           │   │   ├── Simple.class         # Compiled bytecode for Simple.java
-│           │   │   └── Tricky.class         # Compiled bytecode for Tricky.java
-│           │   └── utils/
-│           │       ├── Case.class           # Compiled bytecode for Case.java
-│           │       ├── CaseContent.class    # Compiled bytecode for CaseContent.java
-│           │       ├── CaseContent$ResultType.class # Compiled ResultType enum
-│           │       ├── Cases.class          # Compiled bytecode for Cases.java
-│           │       ├── InputParser.class    # Compiled bytecode for InputParser.java
-│           │       ├── InputParser$ParseError.class # Compiled ParseError class
-│           │       ├── Tag.class            # Compiled bytecode for Tag.java
-│           │       └── Tag$TagType.class    # Compiled TagType enum
-│           └──Runtime.class                 # Compiled bytecode for Runtime.java
-├── test/                    # Unit tests for the project
-│   ├── test_cli.py          # Tests for the CLI commands
-│   ├── test_jpamb.py        # Tests for the jpamb library
-│   ├── test_jvm_bytecode.py # Tests for JVM bytecode parsing and opcode handling
-│   ├── test_jvm.py          # Tests for JVM-related functionality
-│   ├── test_model.py        # Tests for the Suite class and case handling
-│   └── expected/            # Expected outputs for analyzers
-│       ├── apriori.txt      # Expected output for apriori analyzer
-│       ├── bytecoder.txt    # Expected output for bytecoder analyzer
-│       ├── cheater.txt      # Expected output for cheater analyzer
-│       ├── interpreter.txt  # Expected output for interpreter analyzer
-│       ├── my_analyzer.txt  # Expected output for my_analyzer
-│       └── syntaxer.txt     # Expected output for syntaxer analyzer
+
 ## Quick Links
 
 - **[uv documentation](https://docs.astral.sh/uv/)** - Python package manager we use
@@ -88,22 +14,24 @@ jpamb/
 - **[Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)** - Windows C++ compiler
 - **[JPAMB GitHub Issues](https://github.com/kalhauge/jpamb/issues)** - Get help if stuck
 
-## Setup 
+## Setup
 
 ### Step 0: Get familiar with your shell
 
-If you do not already know how your shell works, consider looking at the first couple of 
+If you do not already know how your shell works, consider looking at the first couple of
 lectures of the [MIT Missing Semester](https://missing.csail.mit.edu/).
 
 ### Step 1: Install GCC (required for compilation)
 
 **Ubuntu/Debian:**
+
 ```bash
 sudo apt update
 sudo apt install build-essential
 ```
 
 **Windows:**
+
 ```bash
 # Install Microsoft Visual C++ 14.0 (required for Python C extensions)
 # Download from: https://visualstudio.microsoft.com/visual-cpp-build-tools/
@@ -114,12 +42,14 @@ winget install Microsoft.VisualStudio.2022.Community
 ```
 
 **Mac:**
+
 ```bash
 # Install Xcode command line tools
 xcode-select --install
 ```
 
 ### Step 2: Install uv (Python package manager)
+
 ```bash
 # On Linux/Mac:
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -137,49 +67,55 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```bash
 uv run jpamb checkhealth
 ```
-You should see several green "ok" messages. If you see any red errors, check troubleshooting below!
 
+You should see several green "ok" messages. If you see any red errors, check troubleshooting below!
 
 ## How It Works
 
 ### Your Task
+
 Build a program that analyzes Java methods and predicts what will happen when they run.
 
 ### Your Program Must Support Two Commands:
 
-Here we use `./your_analyzer` to be name of the program you are going to 
+Here we use `./your_analyzer` to be name of the program you are going to
 write.
 
 **1. Info command** - tells us about your analyzer:
+
 ```bash
 ./your_analyzer info
 ```
+
 This should output 5 lines:
+
 - Your analyzer's name
-- Version number  
+- Version number
 - Your team/group name
 - Tags describing your approach (e.g., "static,dataflow")
 - Either your system info (to help us improve and for science) or "no" (for privacy)
 
 **2. Analysis command** - makes predictions:
+
 ```bash
 ./your_analyzer "jpamb.cases.Simple.divideByZero:()I"
 ```
-Given the encoded name of a method (see [`cases.txt`](stats/cases.txt) for a full list of examples), this should output 0 or more lines containing predictions, which you can read about in the next section.
+
+Given the encoded name of a method (see [`cases.txt`](target/stats/cases.txt) for a full list of examples), this should output 0 or more lines containing predictions, which you can read about in the next section.
 
 **Assumptions**
 
 You can rely on the following assumptions:
 
-1. Your program will always run in the JPAMB folder. This means that you can access files like `src/main/java/jpamb/cases/Simply.java` from your program.
+1. Your program will always run in the JPAMB folder. This means that you can access files like `src/main/java/jpamb/cases/Simple.java` from your program.
 
-2. All methods presented to the analysis comes from files in the `src/main/java/jpamb/cases/` folder, and can be uniquely identified by their method name.
+1. All methods presented to the analysis comes from files in the `src/main/java/jpamb/cases/` folder, and can be uniquely identified by their method name.
 
-3. Only the stdout is captured by JPAMB, so you can output debug information in the stderr.
+1. Only the stdout is captured by JPAMB, so you can output debug information in the stderr.
 
 ### What Can Happen to Java Methods?
 
-Your analyzer need to predict if there exist an input to the method where 
+Your analyzer need to predict if there exist an input to the method where
 one of these possible outcomes can happen:
 
 | Outcome | What it means |
@@ -194,10 +130,12 @@ one of these possible outcomes can happen:
 ### Making Predictions
 
 For each outcome, you give either:
+
 - **A percentage**: `75%` means "75% of all methods that looks like this will have this outcome"
 - **A wager**: `5` means "bet 5 points this will happen", `-10` means "bet 10 points this WON'T happen"
 
 **Example output:**
+
 ```
 ok;80%
 divide by zero;20%
@@ -207,7 +145,6 @@ null pointer;0%
 *;0%
 ```
 
-
 ## Your First Analyzer
 
 ### Step 1: Look at example Java code
@@ -215,7 +152,7 @@ null pointer;0%
 Check out the test cases in `src/main/java/jpamb/cases/Simple.java` - these are
 (some of) the methods your analyzer will predict the behavior of.
 
-For example, `assertBoolean` has two known outcomes. If given `false` it throws 
+For example, `assertBoolean` has two known outcomes. If given `false` it throws
 an `assertion error`, and if given `true` it finishes normally `ok`.
 
 ```java
@@ -228,7 +165,7 @@ public static void assertBoolean(boolean shouldFail) {
 
 ### Step 2: Create your first analyzer
 
-Create a file called `my_analyzer.py` in the root directory. If you place it somewhere 
+Create a file called `my_analyzer.py` in the root directory. If you place it somewhere
 else replace `my_analyzer.py` with the path to your script or executable:
 
 ```python
@@ -265,28 +202,28 @@ else:
 
 ### Step 3: Run your analyzer
 
-First, make sure that your script runs outside the JPAMB framework. If you 
+First, make sure that your script runs outside the JPAMB framework. If you
 have python installed on your system you can run:
 
 ```bash
 python ./my_analyzer.py info
 ```
 
-But, you can also run it with the same interpreter as the JPAMB framework, 
+But, you can also run it with the same interpreter as the JPAMB framework,
 like so:
 
 ```bash
 uv run ./my_analyzer.py info
 ```
 
-This command should output the data from above. 
+This command should output the data from above.
 You should also be able to run it with a method name like `jpamb.cases.Simple.divideByZero:()I`.
 
 ### Step 4: Test your analyzer
 
 Now you should be able to test the analyser.
-In the begining we recommend adding the `--filter "Simple"`, which 
-focuses you on the methods from the `src/main/java/jpamb/cases/Simple.java` 
+In the begining we recommend adding the `--filter "Simple"`, which
+focuses you on the methods from the `src/main/java/jpamb/cases/Simple.java`
 file:
 
 ```bash
@@ -297,7 +234,7 @@ uv run jpamb test --filter "Simple" <your-intepreter> my_analyzer.py
 
 You should see output showing scores for each test case. Don't worry about the scores yet - focus on getting it working!
 
-Also if you are using python, you can use the `--with-python` flag, which 
+Also if you are using python, you can use the `--with-python` flag, which
 runs the analyser with the same interpreter as JPAMB.
 
 ```bash
@@ -306,29 +243,34 @@ uv run jpamb test --filter "Simple" --with-python my_analyzer.py
 
 ### Step 5: Improve your analyzer
 
-*Mini Task:* To improve your analyser you first have to find the class 
-and then the method in that class. In Java, classes are always placed 
+*Mini Task:* To improve your analyser you first have to find the class
+and then the method in that class. In Java, classes are always placed
 after their classnames, so you can find `jpamb.cases.Simple` in the source file `src/main/java/jpamb/cases/Simple.java`.
 
-*Tip* you might use a regular expression to find the content of a method. 
-[`r"assertFalse.*{([^}]*)}"`](https://regex101.com/r/jDSC6S/1) and pythons 
+*Tip* you might use a regular expression to find the content of a method.
+[`r"assertFalse.*{([^}]*)}"`](https://regex101.com/r/jDSC6S/1) and pythons
 [re](https://docs.python.org/3/library/re.html#re.Match) library.
 
 Now look at the Java code and try to make better predictions. For example:
+
 - If you see `1/0` in the code, predict `divide by zero;100%`
 - If you see `assert false`, predict `assertion error;100%`
 - If you see `while(true)`, predict `*;100%` (infinite loop)
 
 A useful tool for seeing where you can improve your analyzer is by using the plot command.
-```bash 
+
+```bash
 uv run jpamb plot --report <your-report.json> 
 ```
-This will plot the score achieved and the relative time used on analyzing every test case. 
 
-If you have multiple reports you want to compare this can be done by using 
-```bash 
+This will plot the score achieved and the relative time used on analyzing every test case.
+
+If you have multiple reports you want to compare this can be done by using
+
+```bash
 uv run jpamb plot --directory <your-report-directory> 
 ```
+
 This will scan the given directory for json files, and make a comparative plot.
 
 ## Using the JPAMB library
@@ -343,7 +285,7 @@ directory you can do this by the command `uv run`:
 uv run ./my_analysis.py info
 ```
 
-### Automatic script setup with `getmethodid` 
+### Automatic script setup with `getmethodid`
 
 One useful utility method is the `getmethodid` method, which prints the correct
 stats and parses the method for you:
@@ -365,7 +307,7 @@ methodid = jpamb.getmethodid(
 
 ### Source file lookup with `sourcefile`
 
-You can use the `sourcefile` method to get the source file of 
+You can use the `sourcefile` method to get the source file of
 the corresponding method or class.
 
 ```python
@@ -379,7 +321,8 @@ txt = open(src).read()
 **For most assignments, you can ignore this section and just use percentages!**
 
 Instead of percentages, you can use **wagers** (betting points):
-- Positive wager (e.g., `divide by zero;5`) means "I bet 5 points this WILL happen"  
+
+- Positive wager (e.g., `divide by zero;5`) means "I bet 5 points this WILL happen"
 - Negative wager (e.g., `divide by zero;-10`) means "I bet 10 points this WON'T happen"
 - Higher wagers = higher risk/reward
 
@@ -387,8 +330,8 @@ The scoring formula: `points = 1 - 1/(wager + 1)` if you win, `-wager` if you lo
 
 ## Testing Your Analyzer
 
-You can test your analyser using the different command line tools. 
-Here `-W` is used to tell `jpamb` that the executable is a python file 
+You can test your analyser using the different command line tools.
+Here `-W` is used to tell `jpamb` that the executable is a python file
 and should be run with the same interpreter as `jpamb`.
 
 ```bash
@@ -405,51 +348,72 @@ uv run jpamb evaluate -W my_analyzer.py > my_results.json
 ## Advanced: Analyzing Approaches
 
 ### Source Code Analysis
+
 - Java source code is in `src/main/java/jpamb/cases/`
 - Example: `solutions/syntaxer.py` uses tree-sitter to parse Java
 
-### Bytecode Analysis  
-- Pre-decompiled JVM bytecode in `decompiled/` directory
+### Bytecode Analysis
+
+- Pre-decompiled JVM bytecode in `target/decompiled/` directory
 - Example: `solutions/bytecoder.py` analyzes JVM opcodes
 - Python interface: `lib/jpamb/jvm/opcode.py`
 
 ### Statistics or Cheat-Based
-- Historical data in `stats/distribution.csv`
+
+- Historical data in `target/stats/distribution.csv`
 - Example: `solutions/apriori.py` uses statistical patterns
 
 ## Troubleshooting
 
 **"Command not found" errors:**
+
 - Make sure you restart your terminal after installing uv
 - Try `which uv` to see if it's installed correctly
 
 **"Health check fails":**
+
 - Make sure you're in the jpamb directory
 - Make sure GCC is installed (Step 1 above)
 - Try `mvn compile` to build the Java code first
 
 **"Permission denied" when running analyzer:**
+
 - Linux/Mac: Use `chmod +x my_analyzer.py` to make it executable
 - All platforms: Use `python my_analyzer.py` instead of `./my_analyzer.py`
 
 **Windows users:**
+
 - Use PowerShell or Command Prompt
 - Replace `/` with `\` in file paths if needed
 - Consider using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) for easier setup
 
 **Still stuck?** Check the example solutions in `solutions/` directory or ask for help!
 
-## Expert: Extending the Benchmark
+## Adding Your Own Cases
 
-To extend the benchmark suite you have to install nix. One way to do that is to use 
-use the [determinate system](https://docs.determinate.systems/) installer.
+To get started with adding your own cases, please make sure to download
+either `docker` or `podman` (recommended).
 
-After any changes to the source files you should run:
+You can add your own cases to the benchmark suite by adding
+them in the source folder:
 
-```shell
-$ nix develop --command uv run build --test --decompile
+```
+src/main/java/jpamb/cases
+    ├── Arrays.java
+    ├── Calls.java
+    ├── Loops.java
+    ├── Simple.java
+    └── Tricky.java
 ```
 
+and then running the following command:
 
+```
+$ uv run jpamb build
+```
 
+This will download a docker container and run the build in that. This ensures
+consistent builds across systems.
 
+**Warning:** If you create new folders and use docker, it might create them as root. To fix
+this either use podman or change the permissions after.

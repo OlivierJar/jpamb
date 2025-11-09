@@ -365,10 +365,13 @@ class ParameterType:
         return ParameterType(tuple(params))
 
     @staticmethod
-    def from_json(inputs: list[dict]) -> "ParameterType":
+    def from_json(inputs: list[dict], annotated: bool = False) -> "ParameterType":
         params = []
         for t in inputs:
-            tt = Type.from_json_type(t["type"])
+            if annotated:
+                tt = Type.from_json_type(t["type"])
+            else:
+                tt = Type.from_json_type(t["type"])
             params.append(tt)
 
         return ParameterType(tuple(params))
@@ -646,9 +649,46 @@ class FieldID:
         return self.encode()
 
 
-# ============================================================================
+class AbsMethodID(Absolute[MethodID]):
+    """Absolute method identifier (ClassName.MethodID)"""
+
+    @classmethod
+    def decode(cls, input) -> Self:
+        return super().decode(input, MethodID.decode)
+
+    @property
+    def methodid(self):
+        return self.extension
+
+    @classmethod
+    def from_json(cls, json: dict) -> Self:
+        return cls(
+            classname=ClassName.decode(json["ref"]["name"]),
+            extension=MethodID(
+                name=json["name"],
+                params=ParameterType.from_json(json["args"]),
+                return_type=(
+                    Type.from_json(json["returns"])
+                    if json["returns"] is not None
+                    else None
+                ),
+            ),
+        )
+
+
+class AbsFieldID(Absolute[FieldID]):
+    """Absolute field identifier (ClassName.FieldID)"""
+
+    @classmethod
+    def decode(cls, input) -> Self:
+        return super().decode(input, FieldID.decode)
+
+    @property
+    def fieldid(self):
+        return self.extension
+
+
 # String Provenance and Abstract Domains
-# ============================================================================
 
 class StringProvenance(Enum):
     """Tracks the origin and trustworthiness of string data"""
@@ -791,7 +831,9 @@ class EnhancedValue:
         return str(self.jvm_value)
 
 
-# Interpreter State Components 
+# ============================================================================
+# Interpreter State Components
+# ============================================================================
 
 @dataclass
 class Stack[T]:
@@ -855,6 +897,8 @@ class PC:
 
 @dataclass
 class Frame[T]:
+    """Stack frame - λ, σ, ι from operational semantics"""
+    
     locals: dict[int, T]
     stack: Stack[T]
     pc: PC
