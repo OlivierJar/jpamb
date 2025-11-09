@@ -90,10 +90,19 @@ class Type(ABC):
                     r = Float()
                 case "D":
                     r = Double()
+                case "L":  # Object type (e.g., Ljava/lang/String;)
+                    end_idx = input.find(";", i)
+                    if end_idx == -1:
+                        raise ValueError(f"Malformed object type: missing semicolon in {input[i:]}")
+                    # Extract class name 
+                    classname_str = input[i+1:end_idx]
+                    classname = ClassName(classname_str.replace("/", "."))
+                    r = Object(classname)
+                    i = end_idx 
                 case "[":  # ]
                     stack.append(Array)
                     i += 1
-                    continue
+                    continue # Position at semicolon, will be incremented below
                 case _:
                     raise ValueError(f"Unknown type {input[i]}")
             break
@@ -128,6 +137,8 @@ class Type(ABC):
                 return Reference()
             case "boolean":
                 return Boolean()
+            case "string":
+                return Object(ClassName("java.lang.String"))
             case typestr:
                 raise NotImplementedError(f"Not yet implemented {typestr}")
 
@@ -138,6 +149,10 @@ class Type(ABC):
         match json["kind"]:
             case "array":
                 return Array(Type.from_json_type(json["type"]))
+            case "class":
+                # Handle Object types (e.g., java/lang/String)
+                classname_str = json["name"].replace("/", ".")
+                return Object(ClassName(classname_str))
 
         raise NotImplementedError(f"Not yet implemented {json}")
 
