@@ -40,6 +40,7 @@ public class StringSQL {
         assert !str.equals("different");
     }
 
+    @Case("(\"admin' OR '1'='1\") -> vulnerable")
     public static String vulnerableQuery(String userInput) {
         String query = "SELECT * FROM users WHERE username = '" + userInput + "'";
         return query;
