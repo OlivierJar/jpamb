@@ -5,7 +5,81 @@
 JPAMB is a collection of small Java programs with various behaviors (crashes, infinite loops, normal completion). Your task is to build a program analysis tool that can predict what will happen when these programs run.
 
 Think of it like a fortune teller for code: given a Java method, can your analysis predict if it will crash, run forever, or complete successfully?
-
+## Project Structure
+```plaintext
+jpamb/
+├── decompiled/              # Contains pre-decompiled JVM bytecode files in JSON format
+│   └── Arrays.json          # JSON representation of Arrays.java bytecode
+│   └── Calls.json           # JSON representation of Calls.java bytecode
+│   └── Loops.json           # JSON representation of Loops.java bytecode
+│   └── Simple.json          # JSON representation of Simple.java bytecode
+│   └── Tricky.json          # JSON representation of Tricky.java bytecode
+├── jpamb/                   # Core Python package for the project
+│   ├── __init__.py          # Initializes the jpamb package and provides utility functions
+│   ├── cli.py               # Implements the command-line interface for the project
+│   ├── logger.py            # Provides consistent logging utilities
+│   ├── model.py             # Defines the core data model for cases and the Suite class
+│   ├── stats.py             # Contains functionality for analyzing and presenting statistics
+│   ├── timer.c              # C implementation for timing utilities
+├── solutions/               # Example analyzers for the project
+│   ├── apriori.py           # Implements a statistical pattern-based analyzer
+│   ├── bytecoder.py         # Analyzes JVM bytecode for assertion errors
+│   ├── cheater.py           # A "cheating" analyzer using precomputed results
+│   ├── my_analyzer.py       # A basic Python analyzer template
+│   └── syntaxer.py          # Uses Tree-sitter for syntactic analysis of Java code
+│ 
+├── src/                     # Java source code for test cases
+│   └── main/
+│       └── java/
+│           ├── jpamb/
+│           │   ├── cases/   # Contains Java test cases with various behaviors
+│           │   │   ├── Arrays.java          # Test cases for array operations
+│           │   │   ├── Calls.java           # Test cases for method calls
+│           │   │   ├── Loops.java           # Test cases for loops
+│           │   │   ├── Simple.java          # Simple test cases (e.g., divide by zero, assertions)
+│           │   │   └── Tricky.java          # More complex test cases (e.g., Collatz conjecture)
+│           │   └── utils/
+│           │       ├── Case.java            # Defines the Case class
+│           │       ├── CaseContent.java     # Defines the CaseContent class and ResultType enum
+│           │       ├── Cases.java           # Manages multiple test cases
+│           │       ├── InputParser.java     # Parses input for test cases
+│           │       └── Tag.java             # Defines the Tag class
+│           └──Runtime.java                  # Main runtime class for Java test cases
+├── stats/                   # Statistical data for analyzers
+│   ├── distribution.csv     # Distribution data for statistical analysis
+│   └── cases.txt            # Lists all test cases with their expected outcomes
+├── target/                  # Compiled Java class files and build artifacts
+│   └── classes/
+│           ├── jpamb/
+│           │   ├── cases/   # Contains compiled Java test cases
+│           │   │   ├── Arrays.class         # Compiled bytecode for Arrays.java
+│           │   │   ├── Calls.class          # Compiled bytecode for Calls.java
+│           │   │   ├── Loops.class          # Compiled bytecode for Loops.java
+│           │   │   ├── Simple.class         # Compiled bytecode for Simple.java
+│           │   │   └── Tricky.class         # Compiled bytecode for Tricky.java
+│           │   └── utils/
+│           │       ├── Case.class           # Compiled bytecode for Case.java
+│           │       ├── CaseContent.class    # Compiled bytecode for CaseContent.java
+│           │       ├── CaseContent$ResultType.class # Compiled ResultType enum
+│           │       ├── Cases.class          # Compiled bytecode for Cases.java
+│           │       ├── InputParser.class    # Compiled bytecode for InputParser.java
+│           │       ├── InputParser$ParseError.class # Compiled ParseError class
+│           │       ├── Tag.class            # Compiled bytecode for Tag.java
+│           │       └── Tag$TagType.class    # Compiled TagType enum
+│           └──Runtime.class                 # Compiled bytecode for Runtime.java
+├── test/                    # Unit tests for the project
+│   ├── test_cli.py          # Tests for the CLI commands
+│   ├── test_jpamb.py        # Tests for the jpamb library
+│   ├── test_jvm_bytecode.py # Tests for JVM bytecode parsing and opcode handling
+│   ├── test_jvm.py          # Tests for JVM-related functionality
+│   ├── test_model.py        # Tests for the Suite class and case handling
+│   └── expected/            # Expected outputs for analyzers
+│       ├── apriori.txt      # Expected output for apriori analyzer
+│       ├── bytecoder.txt    # Expected output for bytecoder analyzer
+│       ├── cheater.txt      # Expected output for cheater analyzer
+│       ├── interpreter.txt  # Expected output for interpreter analyzer
+│       ├── my_analyzer.txt  # Expected output for my_analyzer
+│       └── syntaxer.txt     # Expected output for syntaxer analyzer
 ## Quick Links
 
 - **[uv documentation](https://docs.astral.sh/uv/)** - Python package manager we use
@@ -97,7 +171,7 @@ Given the encoded name of a method (see [`cases.txt`](stats/cases.txt) for a ful
 
 You can rely on the following assumptions:
 
-1. Your program will always run in the JPAMB folder. This means that you can access files like `src/main/java/jpamb/cases/Simple.java` from your program.
+1. Your program will always run in the JPAMB folder. This means that you can access files like `src/main/java/jpamb/cases/Simply.java` from your program.
 
 2. All methods presented to the analysis comes from files in the `src/main/java/jpamb/cases/` folder, and can be uniquely identified by their method name.
 
