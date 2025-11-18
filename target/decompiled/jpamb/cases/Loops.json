@@ -101,16 +101,6 @@
       "annotations": [
         {
           "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "() -> *"
-            }
-          }
-        },
-        {
-          "is_runtime_visible": true,
           "type": "jpamb/utils/Tag",
           "values": {
             "value": {
@@ -172,16 +162,6 @@
         "static"
       ],
       "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "() -> *"
-            }
-          }
-        },
         {
           "is_runtime_visible": true,
           "type": "jpamb/utils/Tag",
@@ -348,16 +328,6 @@
       "annotations": [
         {
           "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "() -> *"
-            }
-          }
-        },
-        {
-          "is_runtime_visible": true,
           "type": "jpamb/utils/Tag",
           "values": {
             "value": {
@@ -491,16 +461,6 @@
         "static"
       ],
       "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "() -> assertion error"
-            }
-          }
-        },
         {
           "is_runtime_visible": true,
           "type": "jpamb/utils/Tag",

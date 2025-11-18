@@ -21,7 +21,8 @@ public class Runtime {
       Loops.class,
       Tricky.class,
       jpamb.cases.Arrays.class,
-      Calls.class);
+      Calls.class,
+      StringSQL.class);
 
   public static Case[] cases(Method m) {
     var cases = m.getAnnotation(Cases.class);
@@ -52,6 +53,8 @@ public class Runtime {
       b.append("[I");
     } else if (c.equals(char[].class)) {
       b.append("[C");
+    } else if (c.equals(String.class)) {
+      b.append("Ljava/lang/String;");
     } else {
       throw new RuntimeException("Unknown type:" + c.toString());
     }
@@ -82,6 +85,21 @@ public class Runtime {
         }
         case 'C' -> {
           params.add(char.class);
+          break;
+        }
+        case 'L' -> {
+          // Parse class type like Ljava/lang/String;
+          int endIndex = s.indexOf(';', i);
+          if (endIndex == -1) {
+            throw new RuntimeException("Invalid class type in signature");
+          }
+          String className = s.substring(i + 1, endIndex).replace('/', '.');
+          try {
+            params.add(Class.forName(className));
+          } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Class not found: " + className, e);
+          }
+          i = endIndex; // Move past the semicolon
           break;
         }
         case '[' -> {

@@ -262,6 +262,7 @@ class TestKnownQueries:
             "null pointer",
             "ok",
             "out of bounds",
+            "vulnerable",
         }
 
         assert set(model.QUERIES) == expected_queries

@@ -125,6 +125,7 @@ one of these possible outcomes can happen:
 | `assertion error` | Method fails an assertion (like `assert x > 0`) |
 | `out of bounds` | Method accesses array outside its bounds |
 | `null pointer` | Method tries to use a null reference |
+| `vulnerable` | Method assembles a SQL query with user-controlled input without proper sanitization |
 | `*` | Method runs forever (infinite loop) |
 
 ### Making Predictions
@@ -142,6 +143,7 @@ divide by zero;20%
 assertion error;0%
 out of bounds;5
 null pointer;0%
+vulnerable;0%
 *;0%
 ```
 
@@ -190,13 +192,15 @@ else:
     out_of_bounds_chance = "0%"
     null_pointer_chance = "0%"
     infinite_loop_chance = "0%"
+    vulnerable_chance = "0%"
     
-    # Output predictions for all 6 possible outcomes
+    # Output predictions for all 7 possible outcomes
     print(f"ok;{ok_chance}")
     print(f"divide by zero;{divide_by_zero_chance}") 
     print(f"assertion error;{assertion_error_chance}")
     print(f"out of bounds;{out_of_bounds_chance}")
     print(f"null pointer;{null_pointer_chance}")
+    print(f"vulnerable;{vulnerable_chance}")
     print(f"*;{infinite_loop_chance}")
 ```
 

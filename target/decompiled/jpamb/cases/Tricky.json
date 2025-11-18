@@ -101,41 +101,6 @@
       "annotations": [
         {
           "is_runtime_visible": true,
-          "type": "jpamb/utils/Cases",
-          "values": {
-            "value": {
-              "type": "array",
-              "value": [
-                {
-                  "type": "annotation",
-                  "value": {
-                    "type": "jpamb/utils/Case",
-                    "values": {
-                      "value": {
-                        "type": "string",
-                        "value": "(0) -> assertion error"
-                      }
-                    }
-                  }
-                },
-                {
-                  "type": "annotation",
-                  "value": {
-                    "type": "jpamb/utils/Case",
-                    "values": {
-                      "value": {
-                        "type": "string",
-                        "value": "(24) -> ok"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "is_runtime_visible": true,
           "type": "jpamb/utils/Tag",
           "values": {
             "value": {

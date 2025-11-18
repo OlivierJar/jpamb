@@ -67,6 +67,10 @@ class Type(ABC):
 
     def encode(self) -> str: ...
 
+    def is_stacktype(self) -> bool:
+        """Check if this type is valid as a stack type"""
+        return True  # Default: most types are valid stack types
+
     @staticmethod
     def decode(input) -> tuple["Type", str]:
         r, stack = None, []
@@ -123,7 +127,11 @@ class Type(ABC):
         return self.encode() <= other.encode()
 
     @staticmethod
-    def from_json(json: str) -> "Type":
+    def from_json(json: str | dict) -> "Type":
+        # Handle dict type representations
+        if isinstance(json, dict):
+            return Type.from_json_type(json)
+
         match json:
             case "integer":
                 return Int()
@@ -143,12 +151,21 @@ class Type(ABC):
                 raise NotImplementedError(f"Not yet implemented {typestr}")
 
     @staticmethod
-    def from_json_type(json: dict) -> "Type":
+    def from_json_type(json: dict | str) -> "Type":
+        # Handle string type representations
+        if isinstance(json, str):
+            return Type.from_json(json)
+
         if "base" in json:
             return Type.from_json(json["base"])
         match json["kind"]:
             case "array":
-                return Array(Type.from_json_type(json["type"]))
+                array_type = json["type"]
+                if isinstance(array_type, str):
+                    element_type = Type.from_json(array_type)
+                else:
+                    element_type = Type.from_json_type(array_type)
+                return Array(element_type)
             case "class":
                 # Handle Object types (e.g., java/lang/String)
                 classname_str = json["name"].replace("/", ".")
@@ -380,13 +397,32 @@ class ParameterType:
         return ParameterType(tuple(params))
 
     @staticmethod
-    def from_json(inputs: list[dict], annotated: bool = False) -> "ParameterType":
+    def from_json(inputs: list[dict | str], annotated: bool = False) -> "ParameterType":
         params = []
         for t in inputs:
-            if annotated:
-                tt = Type.from_json_type(t["type"])
+            if isinstance(t, str):
+                # Handle simple string type representation
+                # Could be either JVM encoding (I, Z, etc.) or JSON names (int, boolean, etc.)
+                try:
+                    tt, _ = Type.decode(t)
+                except ValueError:
+                    # Try as JSON type name
+                    tt = Type.from_json(t)
+            elif isinstance(t, dict):
+                # Handle nested type structure
+                if "type" in t:
+                    # t is a parameter with a type field
+                    type_spec = t["type"]
+                    if isinstance(type_spec, dict):
+                        tt = Type.from_json_type(type_spec)
+                    else:
+                        # Could be string type
+                        tt = Type.from_json_type(type_spec)
+                else:
+                    # t is the type spec itself
+                    tt = Type.from_json_type(t)
             else:
-                tt = Type.from_json_type(t["type"])
+                raise ValueError(f"Unexpected type format: {t}")
             params.append(tt)
 
         return ParameterType(tuple(params))
@@ -474,6 +510,9 @@ class Value:
         return value
 
     def encode(self) -> str:
+        if self.value is None:
+            return "null"
+        
         match self.type:
             case Boolean():
                 return "true" if self.value else "false"
@@ -491,8 +530,14 @@ class Value:
                         return f"[C:{chars}]"
                     case _:
                         raise NotImplemented()
+            case Object(name):
+                # Handle String objects
+                if "String" in str(name):
+                    return f'"{self.value}"'
+                else:
+                    raise NotImplementedError(f"Object encoding not implemented for {name}")
 
-        return self.value
+        return str(self.value)
 
     @classmethod
     def int(cls, n: int) -> Self:
@@ -540,9 +585,11 @@ class ValueParser:
         token_specification = [
             ("OPEN_ARRAY", r"\[[IC]:"),
             ("CLOSE_ARRAY", r"\]"),
+            ("STRING", r'"(?:[^"\\]|\\.)*"'),  # String literals with escape support
             ("INT", r"-?\d+"),
             ("BOOL", r"true|false"),
             ("CHAR", r"'[^']'"),
+            ("NULL", r"null"),
             ("COMMA", r","),
             ("SKIP", r"[ \t]+"),
         ]
@@ -590,9 +637,13 @@ class ValueParser:
                 return Value.char(self.parse_char())
             case "BOOL":
                 return Value.boolean(self.parse_bool())
+            case "STRING":
+                return self.parse_string()
+            case "NULL":
+                return self.parse_null()
             case "OPEN_ARRAY":
                 return self.parse_array()
-        self.expected("char")
+        self.expected("value")
 
     def parse_int(self):
         tok = self.expect("INT")
@@ -605,6 +656,21 @@ class ValueParser:
     def parse_char(self):
         tok = self.expect("CHAR")
         return tok.value[1]
+
+    def parse_string(self):
+        tok = self.expect("STRING")
+        # Remove surrounding quotes and handle escape sequences
+        string_value = tok.value[1:-1]  # Remove quotes
+        # Unescape common escape sequences
+        string_value = string_value.replace('\\"', '"')
+        string_value = string_value.replace('\\n', '\n')
+        string_value = string_value.replace('\\t', '\t')
+        string_value = string_value.replace('\\\\', '\\')
+        return Value(Object(ClassName.decode("java/lang/String")), string_value)
+
+    def parse_null(self):
+        self.expect("NULL")
+        return Value(Reference(), None)
 
     def parse_array(self):
         key = self.expect("OPEN_ARRAY")

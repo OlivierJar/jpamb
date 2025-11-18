@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=75.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -31,7 +31,6 @@ description = "Utilities for working with the jpamb benchmark suite"
 requires-python = ">=3.13"
 license = {text = "BSD-3-Clause"}
 classifiers = [
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
 ]

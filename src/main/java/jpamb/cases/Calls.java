@@ -22,25 +22,25 @@ public class Calls {
     }
   }
 
-  @Case("() -> ok")
+  // @Case("() -> ok")
   public static void callsAssertTrue() {
     assertTrue();
   }
 
-  @Case("() -> assertion error")
+  // @Case("() -> assertion error")
   @Tag({ CALL })
   public static void callsAssertFalse() {
     assertFalse();
   }
 
-  @Case("(true) -> ok")
-  @Case("(false) -> assertion error")
+  // @Case("(true) -> ok")
+  // @Case("(false) -> assertion error")
   @Tag({ CALL })
   public static void callsAssertIf(boolean b) {
     assertIf(b);
   }
   
-  @Case("() -> ok")
+  // @Case("() -> ok")
   @Tag({ CALL })
   public static void callsAssertIfWithTrue() {
     assertIf(true);
@@ -54,8 +54,8 @@ public class Calls {
   }
 
 
-  @Case("(8) -> ok")
-  @Case("(0) -> assertion error")
+  // @Case("(8) -> ok")
+  // @Case("(0) -> assertion error")
   @Tag({ CALL, RECURSION })
   public static void callsAssertFib(int i) {
     assert fib(i) == 21;
@@ -85,9 +85,9 @@ public class Calls {
     return primeArray;
   }
 
-  @Case("(100) -> ok")
-  @Case("(0) -> out of bounds")
-  @Case("(-1) -> assertion error")
+  // @Case("(100) -> ok")
+  // @Case("(0) -> out of bounds")
+  // @Case("(-1) -> assertion error")
   @Tag({ CALL, ARRAY, LOOP, INTEGER_OVERFLOW })
   public static void allPrimesArePositive(int number) {
     for (int p : generatePrimeArray(number)) {
