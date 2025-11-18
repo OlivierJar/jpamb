@@ -55,6 +55,8 @@ public class Runtime {
       b.append("[C");
     } else if (c.equals(String.class)) {
       b.append("Ljava/lang/String;");
+    } else if (c.equals(Object.class)) {
+      b.append("Ljava/lang/Object;");
     } else {
       throw new RuntimeException("Unknown type:" + c.toString());
     }

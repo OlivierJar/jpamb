@@ -176,12 +176,12 @@ public class StringSQL {
         }
     }
 //contentEquals
-    @Case("(\"hello\", \"hello\") -> true")
-    @Case("(\"hello\", \"world\") -> false")
-    @Case("(\"hello\", \"\") -> false")
-    @Case("(\"\", \"\") -> true")
-    @Case("(null, \"hello\") -> NullPointerException")
-    @Case("(\"hello\", null) -> NullPointerException")
+    @Case("(\"hello\", \"hello\") -> ok")
+    @Case("(\"hello\", \"world\") -> ok")
+    @Case("(\"hello\", \"\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(null, \"hello\") -> null pointer")
+    @Case("(\"hello\", null) -> null pointer")
     public static boolean contentEqualsString(String str, String other) {
         if (str == null || other == null) {
             throw new NullPointerException("One of the strings is null");
@@ -189,12 +189,12 @@ public class StringSQL {
         return str.contentEquals(other);
     }
 //concatenate
-    @Case("(\"hello\", \"world\") -> \"helloworld\"")
-    @Case("(\"\", \"world\") -> \"world\"")
-    @Case("(\"hello\", \"\") -> \"hello\"")
-    @Case("(\"\", \"\") -> \"\"")
-    @Case("(null, \"world\") -> NullPointerException")
-    @Case("(\"hello\", null) -> NullPointerException")
+    @Case("(\"hello\", \"world\") -> ok")
+    @Case("(\"\", \"world\") -> ok")
+    @Case("(\"hello\", \"\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(null, \"world\") -> null pointer")
+    @Case("(\"hello\", null) -> null pointer")
     public static String concatenateStrings(String str1, String str2) {
         if (str1 == null || str2 == null) {
             throw new NullPointerException("One of the strings is null");
@@ -202,14 +202,14 @@ public class StringSQL {
         return str1 + str2;
     }
 //contains
-    @Case("(\"hello world\", \"world\") -> true")
-    @Case("(\"hello world\", \"hello\") -> true")
-    @Case("(\"hello world\", \"\") -> true")
-    @Case("(\"hello world\", \"test\") -> false")
-    @Case("(\"\", \"\") -> true")
-    @Case("(\"\", \"test\") -> false")
-    @Case("(null, \"test\") -> NullPointerException")
-    @Case("(\"hello world\", null) -> NullPointerException")
+    @Case("(\"hello world\", \"world\") -> ok")
+    @Case("(\"hello world\", \"hello\") -> ok")
+    @Case("(\"hello world\", \"\") -> ok")
+    @Case("(\"hello world\", \"test\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(\"\", \"test\") -> ok")
+    @Case("(null, \"test\") -> null pointer")
+    @Case("(\"hello world\", null) -> null pointer")
     public static boolean containsSubstring(String str, String substring) {
         if (str == null || substring == null) {
             throw new NullPointerException("One of the strings is null");
@@ -217,12 +217,12 @@ public class StringSQL {
         return str.contains(substring);
     }
 //equals
-    @Case("(\"hello\", \"hello\") -> true")
-    @Case("(\"hello\", \"world\") -> false")
-    @Case("(\"hello\", \"\") -> false")
-    @Case("(\"\", \"\") -> true")
-    @Case("(null, \"hello\") -> NullPointerException")
-    @Case("(\"hello\", null) -> NullPointerException")
+    @Case("(\"hello\", \"hello\") -> ok")
+    @Case("(\"hello\", \"world\") -> ok")
+    @Case("(\"hello\", \"\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(null, \"hello\") -> null pointer")
+    @Case("(\"hello\", null) -> null pointer")
     public static boolean equalsStrings(String str1, String str2) {
         if (str1 == null || str2 == null) {
             throw new NullPointerException("One of the strings is null");
@@ -230,14 +230,14 @@ public class StringSQL {
         return str1.equals(str2);
     }
 //endsWith
-    @Case("(\"hello\", \"lo\") -> true")
-    @Case("(\"hello\", \"hello\") -> true")
-    @Case("(\"hello\", \"world\") -> false")
-    @Case("(\"hello\", \"\") -> true")
-    @Case("(\"\", \"\") -> true")
-    @Case("(\"\", \"test\") -> false")
-    @Case("(null, \"test\") -> NullPointerException")
-    @Case("(\"hello\", null) -> NullPointerException")
+    @Case("(\"hello\", \"lo\") -> ok")
+    @Case("(\"hello\", \"hello\") -> ok")
+    @Case("(\"hello\", \"world\") -> ok")
+    @Case("(\"hello\", \"\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(\"\", \"test\") -> ok")
+    @Case("(null, \"test\") -> null pointer")
+    @Case("(\"hello\", null) -> null pointer")
     public static boolean endsWithString(String str, String suffix) {
         if (str == null || suffix == null) {
             throw new NullPointerException("One of the strings is null");
@@ -245,9 +245,9 @@ public class StringSQL {
         return str.endsWith(suffix);
     }
 //isEmpty
-    @Case("(\"\") -> true")
-    @Case("(\"hello\") -> false")
-    @Case("(null) -> NullPointerException")
+    @Case("(\"\") -> ok")
+    @Case("(\"hello\") -> ok")
+    @Case("(null) -> null pointer")
     public static boolean isEmptyString(String str) {
         if (str == null) {
             throw new NullPointerException("The string is null");
@@ -255,8 +255,8 @@ public class StringSQL {
         return str.isEmpty();
     }
 //toString
-    @Case("(123) -> \"123\"")
-    @Case("(null) -> NullPointerException")
+    @Case("(123) -> ok")
+    @Case("(null) -> null pointer")
     public static String toStringValue(Object obj) {
         if (obj == null) {
             throw new NullPointerException("The object is null");
@@ -264,12 +264,12 @@ public class StringSQL {
         return obj.toString();
     }
 //substring
-    @Case("(\"hello\", 0, 2) -> \"he\"")
-    @Case("(\"hello\", 2, 5) -> \"llo\"")
-    @Case("(\"hello\", 0, 0) -> \"\"")
-    @Case("(\"hello\", 0, 10) -> StringIndexOutOfBoundsException")
-    @Case("(\"hello\", -1, 2) -> StringIndexOutOfBoundsException")
-    @Case("(null, 0, 2) -> NullPointerException")
+    @Case("(\"hello\", 0, 2) -> ok")
+    @Case("(\"hello\", 2, 5) -> ok")
+    @Case("(\"hello\", 0, 0) -> ok")
+    @Case("(\"hello\", 0, 10) -> out of bounds")
+    @Case("(\"hello\", -1, 2) -> out of bounds")
+    @Case("(null, 0, 2) -> null pointer")
     public static String substringValue(String str, int beginIndex, int endIndex) {
         if (str == null) {
             throw new NullPointerException("The string is null");
@@ -277,9 +277,9 @@ public class StringSQL {
         return str.substring(beginIndex, endIndex);
     }
 //length
-    @Case("(\"hello\") -> 5")
-    @Case("(\"\") -> 0")
-    @Case("(null) -> NullPointerException")
+    @Case("(\"hello\") -> ok")
+    @Case("(\"\") -> ok")
+    @Case("(null) -> null pointer")
     public static int stringLength(String str) {
         if (str == null) {
             throw new NullPointerException("The string is null");
@@ -287,14 +287,14 @@ public class StringSQL {
         return str.length();
     }
 //startsWith
-    @Case("(\"hello\", \"he\") -> true")
-    @Case("(\"hello\", \"hello\") -> true")
-    @Case("(\"hello\", \"world\") -> false")
-    @Case("(\"hello\", \"\") -> true")
-    @Case("(\"\", \"\") -> true")
-    @Case("(\"\", \"test\") -> false")
-    @Case("(null, \"test\") -> NullPointerException")
-    @Case("(\"hello\", null) -> NullPointerException")
+    @Case("(\"hello\", \"he\") -> ok")
+    @Case("(\"hello\", \"hello\") -> ok")
+    @Case("(\"hello\", \"world\") -> ok")
+    @Case("(\"hello\", \"\") -> ok")
+    @Case("(\"\", \"\") -> ok")
+    @Case("(\"\", \"test\") -> ok")
+    @Case("(null, \"test\") -> null pointer")
+    @Case("(\"hello\", null) -> null pointer")
     public static boolean startsWithString(String str, String prefix) {
         if (str == null || prefix == null) {
             throw new NullPointerException("One of the strings is null");
@@ -302,23 +302,23 @@ public class StringSQL {
         return str.startsWith(prefix);
     }
 //toLowerCase
-    @Case("(\"HELLO\") -> \"hello\"")
-    @Case("(\"Hello\") -> \"hello\"")
-    @Case("(\"hello\") -> \"hello\"")
-    @Case("(\"\") -> \"\"")
-    @Case("(null) -> NullPointerException")
+    @Case("(\"HELLO\") -> ok")
+    @Case("(\"Hello\") -> ok")
+    @Case("(\"hello\") -> ok")
+    @Case("(\"\") -> ok")
+    @Case("(null) -> null pointer")
     public static String toLowerCaseString(String str) {
         if (str == null) {
             throw new NullPointerException("The string is null");
         }
         return str.toLowerCase();
     }
-//toUpperCase
-    @Case("(\"hello\") -> \"HELLO\"")
-    @Case("(\"Hello\") -> \"HELLO\"")
-    @Case("(\"HELLO\") -> \"HELLO\"")
-    @Case("(\"\") -> \"\"")
-    @Case("(null) -> NullPointerException")
+    //toUpperCase
+    @Case("(\"hello\") -> ok")
+    @Case("(\"Hello\") -> ok")
+    @Case("(\"HELLO\") -> ok")
+    @Case("(\"\") -> ok")
+    @Case("(null) -> null pointer")
     public static String toUpperCaseString(String str) {
         if (str == null) {
             throw new NullPointerException("The string is null");

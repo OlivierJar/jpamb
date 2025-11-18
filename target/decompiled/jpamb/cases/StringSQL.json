@@ -11,7 +11,7 @@
         "args": [
           {
             "type": "string",
-            "value": "\u0001 \u0001"
+            "value": "SELECT * FROM users WHERE username = '\u0001'"
           }
         ],
         "handle": {
@@ -63,7 +63,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT * FROM users WHERE username = '\u0001'"
+            "value": "SELECT * FROM users WHERE username = '\u0001' AND password = 'anything'"
           }
         ],
         "handle": {
@@ -115,7 +115,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT * FROM users WHERE username = '\u0001' AND password = 'anything'"
+            "value": "SELECT * FROM users WHERE username = '\u0001' AND password = '\u0001'"
           }
         ],
         "handle": {
@@ -167,7 +167,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT * FROM users WHERE username = '\u0001' AND password = '\u0001'"
+            "value": "SELECT * FROM products WHERE id = \u0001"
           }
         ],
         "handle": {
@@ -219,7 +219,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT * FROM products WHERE id = \u0001"
+            "value": "SELECT title, content FROM articles WHERE title LIKE '%\u0001%'"
           }
         ],
         "handle": {
@@ -271,7 +271,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT title, content FROM articles WHERE title LIKE '%\u0001%'"
+            "value": "UPDATE users SET email = '\u0001' WHERE id = '\u0001'"
           }
         ],
         "handle": {
@@ -323,7 +323,7 @@
         "args": [
           {
             "type": "string",
-            "value": "UPDATE users SET email = '\u0001' WHERE id = '\u0001'"
+            "value": "DELETE FROM items WHERE category = '\u0001'"
           }
         ],
         "handle": {
@@ -375,7 +375,7 @@
         "args": [
           {
             "type": "string",
-            "value": "DELETE FROM items WHERE category = '\u0001'"
+            "value": "SELECT * FROM users ORDER BY \u0001"
           }
         ],
         "handle": {
@@ -427,7 +427,7 @@
         "args": [
           {
             "type": "string",
-            "value": "SELECT * FROM users ORDER BY \u0001"
+            "value": "INSERT INTO users (username, email) VALUES ('\u0001', '\u0001')"
           }
         ],
         "handle": {
@@ -479,58 +479,6 @@
         "args": [
           {
             "type": "string",
-            "value": "INSERT INTO users (username, email) VALUES ('\u0001', '\u0001')"
-          }
-        ],
-        "handle": {
-          "handletype": "method",
-          "kind": "static",
-          "method": {
-            "args": [
-              {
-                "kind": "class",
-                "name": "java/lang/invoke/MethodHandles$Lookup"
-              },
-              {
-                "kind": "class",
-                "name": "java/lang/String"
-              },
-              {
-                "kind": "class",
-                "name": "java/lang/invoke/MethodType"
-              },
-              {
-                "kind": "class",
-                "name": "java/lang/String"
-              },
-              {
-                "kind": "array",
-                "type": {
-                  "kind": "class",
-                  "name": "java/lang/Object"
-                }
-              }
-            ],
-            "is_interface": false,
-            "name": "makeConcatWithConstants",
-            "ref": {
-              "kind": "class",
-              "name": "java/lang/invoke/StringConcatFactory"
-            },
-            "returns": {
-              "kind": "class",
-              "name": "java/lang/invoke/CallSite"
-            }
-          }
-        }
-      }
-    },
-    {
-      "index": 10,
-      "method": {
-        "args": [
-          {
-            "type": "string",
             "value": "\u0001\u0001"
           }
         ],
@@ -578,7 +526,7 @@
       }
     },
     {
-      "index": 11,
+      "index": 10,
       "method": {
         "args": [
           {
@@ -806,128 +754,6 @@
           "values": {
             "value": {
               "type": "string",
-              "value": "(\"admin\") -> ok"
-            }
-          }
-        }
-      ],
-      "code": {
-        "annotations": [],
-        "bytecode": [
-          {
-            "offset": 0,
-            "opr": "push",
-            "value": {
-              "type": "string",
-              "value": "world"
-            }
-          },
-          {
-            "index": 1,
-            "offset": 2,
-            "opr": "store",
-            "type": "ref"
-          },
-          {
-            "index": 0,
-            "offset": 3,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "index": 1,
-            "offset": 4,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "access": "dynamic",
-            "index": 0,
-            "method": {
-              "args": [
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                },
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                }
-              ],
-              "name": "makeConcatWithConstants",
-              "returns": {
-                "kind": "class",
-                "name": "java/lang/String"
-              }
-            },
-            "offset": 5,
-            "opr": "invoke"
-          },
-          {
-            "index": 2,
-            "offset": 10,
-            "opr": "store",
-            "type": "ref"
-          },
-          {
-            "offset": 11,
-            "opr": "return",
-            "type": null
-          }
-        ],
-        "exceptions": [],
-        "lines": [
-          {
-            "line": 18,
-            "offset": 0
-          },
-          {
-            "line": 19,
-            "offset": 2
-          },
-          {
-            "line": 20,
-            "offset": 6
-          }
-        ],
-        "max_locals": 3,
-        "max_stack": 2,
-        "stack_map": null
-      },
-      "default": null,
-      "exceptions": [],
-      "name": "concatenateStrings",
-      "params": [
-        {
-          "annotations": [],
-          "type": {
-            "annotations": [],
-            "args": [],
-            "inner": null,
-            "kind": "class",
-            "name": "java/lang/String"
-          },
-          "visible": true
-        }
-      ],
-      "returns": {
-        "annotations": [],
-        "type": null
-      },
-      "typeparams": []
-    },
-    {
-      "access": [
-        "public",
-        "static"
-      ],
-      "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
               "value": "(\"test\") -> ok"
             }
           }
@@ -1027,15 +853,15 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 25,
+            "line": 20,
             "offset": 0
           },
           {
-            "line": 26,
+            "line": 21,
             "offset": 4
           },
           {
-            "line": 28,
+            "line": 23,
             "offset": 9
           }
         ],
@@ -1282,27 +1108,27 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 32,
+            "line": 27,
             "offset": 0
           },
           {
-            "line": 33,
+            "line": 28,
             "offset": 4
           },
           {
-            "line": 34,
+            "line": 29,
             "offset": 8
           },
           {
-            "line": 35,
+            "line": 30,
             "offset": 12
           },
           {
-            "line": 36,
+            "line": 31,
             "offset": 16
           },
           {
-            "line": 37,
+            "line": 32,
             "offset": 19
           }
         ],
@@ -1433,11 +1259,11 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 41,
+            "line": 36,
             "offset": 0
           },
           {
-            "line": 42,
+            "line": 37,
             "offset": 10
           }
         ],
@@ -1500,7 +1326,7 @@
           },
           {
             "access": "dynamic",
-            "index": 1,
+            "index": 0,
             "method": {
               "args": [
                 {
@@ -1612,15 +1438,15 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 46,
+            "line": 41,
             "offset": 0
           },
           {
-            "line": 47,
+            "line": 42,
             "offset": 3
           },
           {
-            "line": 48,
+            "line": 43,
             "offset": 11
           }
         ],
@@ -1683,7 +1509,7 @@
           },
           {
             "access": "dynamic",
-            "index": 2,
+            "index": 1,
             "method": {
               "args": [
                 {
@@ -1795,15 +1621,15 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 54,
+            "line": 49,
             "offset": 0
           },
           {
-            "line": 55,
+            "line": 50,
             "offset": 3
           },
           {
-            "line": 56,
+            "line": 51,
             "offset": 11
           }
         ],
@@ -1886,7 +1712,7 @@
           },
           {
             "access": "dynamic",
-            "index": 3,
+            "index": 2,
             "method": {
               "args": [
                 {
@@ -2002,19 +1828,19 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 62,
+            "line": 57,
             "offset": 0
           },
           {
-            "line": 63,
+            "line": 58,
             "offset": 2
           },
           {
-            "line": 64,
+            "line": 59,
             "offset": 6
           },
           {
-            "line": 65,
+            "line": 60,
             "offset": 14
           }
         ],
@@ -2062,6 +1888,189 @@
             "value": {
               "type": "string",
               "value": "(\"1; DROP TABLE users--\") -> vulnerable"
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "dynamic",
+            "index": 3,
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "makeConcatWithConstants",
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 1,
+            "opr": "invoke"
+          },
+          {
+            "index": 1,
+            "offset": 6,
+            "opr": "store",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 7,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "integer",
+              "value": 1
+            }
+          },
+          {
+            "dim": 1,
+            "offset": 9,
+            "opr": "newarray",
+            "type": {
+              "kind": "class",
+              "name": "java/lang/String"
+            }
+          },
+          {
+            "offset": 12,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 13,
+            "opr": "push",
+            "value": {
+              "type": "integer",
+              "value": 0
+            }
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 15,
+            "opr": "array_store",
+            "type": "ref"
+          },
+          {
+            "access": "static",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                },
+                {
+                  "kind": "array",
+                  "type": {
+                    "kind": "class",
+                    "name": "java/lang/String"
+                  }
+                }
+              ],
+              "is_interface": false,
+              "name": "detectVulnerability",
+              "ref": {
+                "kind": "class",
+                "name": "jpamb/cases/StringSQL"
+              },
+              "returns": null
+            },
+            "offset": 16,
+            "opr": "invoke"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 20,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 66,
+            "offset": 0
+          },
+          {
+            "line": 67,
+            "offset": 3
+          },
+          {
+            "line": 68,
+            "offset": 11
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 5,
+        "stack_map": null
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "sqlInjectionDropTable",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Case",
+          "values": {
+            "value": {
+              "type": "string",
+              "value": "(\"' UNION SELECT password FROM admin--\") -> vulnerable"
             }
           }
         }
@@ -2189,198 +2198,15 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 71,
+            "line": 74,
             "offset": 0
           },
           {
-            "line": 72,
+            "line": 75,
             "offset": 3
           },
           {
-            "line": 73,
-            "offset": 11
-          }
-        ],
-        "max_locals": 2,
-        "max_stack": 5,
-        "stack_map": null
-      },
-      "default": null,
-      "exceptions": [],
-      "name": "sqlInjectionDropTable",
-      "params": [
-        {
-          "annotations": [],
-          "type": {
-            "annotations": [],
-            "args": [],
-            "inner": null,
-            "kind": "class",
-            "name": "java/lang/String"
-          },
-          "visible": true
-        }
-      ],
-      "returns": {
-        "annotations": [],
-        "type": {
-          "args": [],
-          "inner": null,
-          "kind": "class",
-          "name": "java/lang/String"
-        }
-      },
-      "typeparams": []
-    },
-    {
-      "access": [
-        "public",
-        "static"
-      ],
-      "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "(\"' UNION SELECT password FROM admin--\") -> vulnerable"
-            }
-          }
-        }
-      ],
-      "code": {
-        "annotations": [],
-        "bytecode": [
-          {
-            "index": 0,
-            "offset": 0,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "access": "dynamic",
-            "index": 5,
-            "method": {
-              "args": [
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                }
-              ],
-              "name": "makeConcatWithConstants",
-              "returns": {
-                "kind": "class",
-                "name": "java/lang/String"
-              }
-            },
-            "offset": 1,
-            "opr": "invoke"
-          },
-          {
-            "index": 1,
-            "offset": 6,
-            "opr": "store",
-            "type": "ref"
-          },
-          {
-            "index": 1,
-            "offset": 7,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 8,
-            "opr": "push",
-            "value": {
-              "type": "integer",
-              "value": 1
-            }
-          },
-          {
-            "dim": 1,
-            "offset": 9,
-            "opr": "newarray",
-            "type": {
-              "kind": "class",
-              "name": "java/lang/String"
-            }
-          },
-          {
-            "offset": 12,
-            "opr": "dup",
-            "words": 1
-          },
-          {
-            "offset": 13,
-            "opr": "push",
-            "value": {
-              "type": "integer",
-              "value": 0
-            }
-          },
-          {
-            "index": 0,
-            "offset": 14,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 15,
-            "opr": "array_store",
-            "type": "ref"
-          },
-          {
-            "access": "static",
-            "method": {
-              "args": [
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                },
-                {
-                  "kind": "array",
-                  "type": {
-                    "kind": "class",
-                    "name": "java/lang/String"
-                  }
-                }
-              ],
-              "is_interface": false,
-              "name": "detectVulnerability",
-              "ref": {
-                "kind": "class",
-                "name": "jpamb/cases/StringSQL"
-              },
-              "returns": null
-            },
-            "offset": 16,
-            "opr": "invoke"
-          },
-          {
-            "index": 1,
-            "offset": 19,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 20,
-            "opr": "return",
-            "type": "ref"
-          }
-        ],
-        "exceptions": [],
-        "lines": [
-          {
-            "line": 79,
-            "offset": 0
-          },
-          {
-            "line": 80,
-            "offset": 3
-          },
-          {
-            "line": 81,
+            "line": 76,
             "offset": 11
           }
         ],
@@ -2463,7 +2289,7 @@
           },
           {
             "access": "dynamic",
-            "index": 6,
+            "index": 5,
             "method": {
               "args": [
                 {
@@ -2579,19 +2405,19 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 87,
+            "line": 82,
             "offset": 0
           },
           {
-            "line": 88,
+            "line": 83,
             "offset": 2
           },
           {
-            "line": 89,
+            "line": 84,
             "offset": 6
           },
           {
-            "line": 90,
+            "line": 85,
             "offset": 14
           }
         ],
@@ -2639,6 +2465,277 @@
             "value": {
               "type": "string",
               "value": "(\"value\") -> vulnerable"
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "dynamic",
+            "index": 6,
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "makeConcatWithConstants",
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 1,
+            "opr": "invoke"
+          },
+          {
+            "index": 1,
+            "offset": 6,
+            "opr": "store",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 7,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "integer",
+              "value": 1
+            }
+          },
+          {
+            "dim": 1,
+            "offset": 9,
+            "opr": "newarray",
+            "type": {
+              "kind": "class",
+              "name": "java/lang/String"
+            }
+          },
+          {
+            "offset": 12,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 13,
+            "opr": "push",
+            "value": {
+              "type": "integer",
+              "value": 0
+            }
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 15,
+            "opr": "array_store",
+            "type": "ref"
+          },
+          {
+            "access": "static",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                },
+                {
+                  "kind": "array",
+                  "type": {
+                    "kind": "class",
+                    "name": "java/lang/String"
+                  }
+                }
+              ],
+              "is_interface": false,
+              "name": "detectVulnerability",
+              "ref": {
+                "kind": "class",
+                "name": "jpamb/cases/StringSQL"
+              },
+              "returns": null
+            },
+            "offset": 16,
+            "opr": "invoke"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 20,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 91,
+            "offset": 0
+          },
+          {
+            "line": 92,
+            "offset": 3
+          },
+          {
+            "line": 93,
+            "offset": 11
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 5,
+        "stack_map": null
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "sqlInjectionDelete",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Case",
+          "values": {
+            "value": {
+              "type": "string",
+              "value": "(\"admin\") -> ok"
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "offset": 0,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "SELECT * FROM users WHERE username = ?"
+            }
+          },
+          {
+            "index": 1,
+            "offset": 2,
+            "opr": "store",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 3,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 4,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 99,
+            "offset": 0
+          },
+          {
+            "line": 101,
+            "offset": 2
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 1,
+        "stack_map": null
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "safeParameterizedQuery",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Case",
+          "values": {
+            "value": {
+              "type": "string",
+              "value": "(\"admin\") -> vulnerable"
             }
           }
         }
@@ -2766,286 +2863,15 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 96,
+            "line": 107,
             "offset": 0
           },
           {
-            "line": 97,
+            "line": 108,
             "offset": 3
           },
           {
-            "line": 98,
-            "offset": 11
-          }
-        ],
-        "max_locals": 2,
-        "max_stack": 5,
-        "stack_map": null
-      },
-      "default": null,
-      "exceptions": [],
-      "name": "sqlInjectionDelete",
-      "params": [
-        {
-          "annotations": [],
-          "type": {
-            "annotations": [],
-            "args": [],
-            "inner": null,
-            "kind": "class",
-            "name": "java/lang/String"
-          },
-          "visible": true
-        }
-      ],
-      "returns": {
-        "annotations": [],
-        "type": {
-          "args": [],
-          "inner": null,
-          "kind": "class",
-          "name": "java/lang/String"
-        }
-      },
-      "typeparams": []
-    },
-    {
-      "access": [
-        "public",
-        "static"
-      ],
-      "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "(\"admin\") -> ok"
-            }
-          }
-        }
-      ],
-      "code": {
-        "annotations": [],
-        "bytecode": [
-          {
-            "offset": 0,
-            "opr": "push",
-            "value": {
-              "type": "string",
-              "value": "SELECT * FROM users WHERE username = ?"
-            }
-          },
-          {
-            "index": 1,
-            "offset": 2,
-            "opr": "store",
-            "type": "ref"
-          },
-          {
-            "index": 1,
-            "offset": 3,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 4,
-            "opr": "return",
-            "type": "ref"
-          }
-        ],
-        "exceptions": [],
-        "lines": [
-          {
-            "line": 104,
-            "offset": 0
-          },
-          {
-            "line": 106,
-            "offset": 2
-          }
-        ],
-        "max_locals": 2,
-        "max_stack": 1,
-        "stack_map": null
-      },
-      "default": null,
-      "exceptions": [],
-      "name": "safeParameterizedQuery",
-      "params": [
-        {
-          "annotations": [],
-          "type": {
-            "annotations": [],
-            "args": [],
-            "inner": null,
-            "kind": "class",
-            "name": "java/lang/String"
-          },
-          "visible": true
-        }
-      ],
-      "returns": {
-        "annotations": [],
-        "type": {
-          "args": [],
-          "inner": null,
-          "kind": "class",
-          "name": "java/lang/String"
-        }
-      },
-      "typeparams": []
-    },
-    {
-      "access": [
-        "public",
-        "static"
-      ],
-      "annotations": [
-        {
-          "is_runtime_visible": true,
-          "type": "jpamb/utils/Case",
-          "values": {
-            "value": {
-              "type": "string",
-              "value": "(\"admin\") -> vulnerable"
-            }
-          }
-        }
-      ],
-      "code": {
-        "annotations": [],
-        "bytecode": [
-          {
-            "index": 0,
-            "offset": 0,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "access": "dynamic",
-            "index": 8,
-            "method": {
-              "args": [
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                }
-              ],
-              "name": "makeConcatWithConstants",
-              "returns": {
-                "kind": "class",
-                "name": "java/lang/String"
-              }
-            },
-            "offset": 1,
-            "opr": "invoke"
-          },
-          {
-            "index": 1,
-            "offset": 6,
-            "opr": "store",
-            "type": "ref"
-          },
-          {
-            "index": 1,
-            "offset": 7,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 8,
-            "opr": "push",
-            "value": {
-              "type": "integer",
-              "value": 1
-            }
-          },
-          {
-            "dim": 1,
-            "offset": 9,
-            "opr": "newarray",
-            "type": {
-              "kind": "class",
-              "name": "java/lang/String"
-            }
-          },
-          {
-            "offset": 12,
-            "opr": "dup",
-            "words": 1
-          },
-          {
-            "offset": 13,
-            "opr": "push",
-            "value": {
-              "type": "integer",
-              "value": 0
-            }
-          },
-          {
-            "index": 0,
-            "offset": 14,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 15,
-            "opr": "array_store",
-            "type": "ref"
-          },
-          {
-            "access": "static",
-            "method": {
-              "args": [
-                {
-                  "kind": "class",
-                  "name": "java/lang/String"
-                },
-                {
-                  "kind": "array",
-                  "type": {
-                    "kind": "class",
-                    "name": "java/lang/String"
-                  }
-                }
-              ],
-              "is_interface": false,
-              "name": "detectVulnerability",
-              "ref": {
-                "kind": "class",
-                "name": "jpamb/cases/StringSQL"
-              },
-              "returns": null
-            },
-            "offset": 16,
-            "opr": "invoke"
-          },
-          {
-            "index": 1,
-            "offset": 19,
-            "opr": "load",
-            "type": "ref"
-          },
-          {
-            "offset": 20,
-            "opr": "return",
-            "type": "ref"
-          }
-        ],
-        "exceptions": [],
-        "lines": [
-          {
-            "line": 112,
-            "offset": 0
-          },
-          {
-            "line": 113,
-            "offset": 3
-          },
-          {
-            "line": 114,
+            "line": 109,
             "offset": 11
           }
         ],
@@ -3128,7 +2954,7 @@
           },
           {
             "access": "dynamic",
-            "index": 9,
+            "index": 8,
             "method": {
               "args": [
                 {
@@ -3244,19 +3070,19 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 120,
+            "line": 115,
             "offset": 0
           },
           {
-            "line": 121,
+            "line": 116,
             "offset": 2
           },
           {
-            "line": 122,
+            "line": 117,
             "offset": 6
           },
           {
-            "line": 123,
+            "line": 118,
             "offset": 14
           }
         ],
@@ -3608,31 +3434,31 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 131,
+            "line": 126,
             "offset": 0
           },
           {
-            "line": 132,
+            "line": 127,
             "offset": 2
           },
           {
-            "line": 134,
+            "line": 129,
             "offset": 7
           },
           {
-            "line": 135,
+            "line": 130,
             "offset": 13
           },
           {
-            "line": 137,
+            "line": 132,
             "offset": 18
           },
           {
-            "line": 138,
+            "line": 133,
             "offset": 22
           },
           {
-            "line": 139,
+            "line": 134,
             "offset": 31
           }
         ],
@@ -3865,7 +3691,7 @@
           },
           {
             "access": "dynamic",
-            "index": 10,
+            "index": 9,
             "method": {
               "args": [
                 {
@@ -3958,23 +3784,23 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 148,
+            "line": 143,
             "offset": 0
           },
           {
-            "line": 149,
+            "line": 144,
             "offset": 4
           },
           {
-            "line": 151,
+            "line": 146,
             "offset": 9
           },
           {
-            "line": 152,
+            "line": 147,
             "offset": 13
           },
           {
-            "line": 153,
+            "line": 148,
             "offset": 21
           }
         ],
@@ -4311,19 +4137,19 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 164,
+            "line": 159,
             "offset": 0
           },
           {
-            "line": 165,
+            "line": 160,
             "offset": 4
           },
           {
-            "line": 167,
+            "line": 162,
             "offset": 9
           },
           {
-            "line": 168,
+            "line": 163,
             "offset": 19
           }
         ],
@@ -4585,7 +4411,7 @@
           },
           {
             "access": "dynamic",
-            "index": 11,
+            "index": 10,
             "method": {
               "args": [
                 {
@@ -4646,39 +4472,39 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 171,
+            "line": 166,
             "offset": 0
           },
           {
-            "line": 172,
+            "line": 167,
             "offset": 2
           },
           {
-            "line": 174,
+            "line": 169,
             "offset": 3
           },
           {
-            "line": 175,
+            "line": 170,
             "offset": 17
           },
           {
-            "line": 176,
+            "line": 171,
             "offset": 22
           },
           {
-            "line": 178,
+            "line": 173,
             "offset": 23
           },
           {
-            "line": 179,
+            "line": 174,
             "offset": 27
           },
           {
-            "line": 174,
+            "line": 169,
             "offset": 33
           },
           {
-            "line": 182,
+            "line": 177,
             "offset": 35
           }
         ],
@@ -4770,6 +4596,2876 @@
       "returns": {
         "annotations": [],
         "type": null
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"hello\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/CharSequence"
+                }
+              ],
+              "name": "contentEquals",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 23,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 186,
+            "offset": 0
+          },
+          {
+            "line": 187,
+            "offset": 4
+          },
+          {
+            "line": 189,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "contentEqualsString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"world\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "dynamic",
+            "index": 9,
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                },
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "makeConcatWithConstants",
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 25,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 199,
+            "offset": 0
+          },
+          {
+            "line": 200,
+            "offset": 4
+          },
+          {
+            "line": 202,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "concatenateStrings",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello world\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello world\", \"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello world\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello world\", \"test\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"test\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"test\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello world\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/CharSequence"
+                }
+              ],
+              "name": "contains",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 23,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 214,
+            "offset": 0
+          },
+          {
+            "line": 215,
+            "offset": 4
+          },
+          {
+            "line": 217,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "containsSubstring",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"hello\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/Object"
+                }
+              ],
+              "name": "equals",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 23,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 227,
+            "offset": 0
+          },
+          {
+            "line": 228,
+            "offset": 4
+          },
+          {
+            "line": 230,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "equalsStrings",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"lo\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"test\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"test\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "endsWith",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 23,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 242,
+            "offset": 0
+          },
+          {
+            "line": 243,
+            "offset": 4
+          },
+          {
+            "line": 245,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "endsWithString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The string is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [],
+              "name": "isEmpty",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 15,
+            "opr": "invoke"
+          },
+          {
+            "offset": 18,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 252,
+            "offset": 0
+          },
+          {
+            "line": 253,
+            "offset": 2
+          },
+          {
+            "line": 255,
+            "offset": 7
+          }
+        ],
+        "max_locals": 1,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "isEmptyString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(123) -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The object is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [],
+              "name": "toString",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/Object"
+              },
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 15,
+            "opr": "invoke"
+          },
+          {
+            "offset": 18,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 261,
+            "offset": 0
+          },
+          {
+            "line": 262,
+            "offset": 2
+          },
+          {
+            "line": 264,
+            "offset": 7
+          }
+        ],
+        "max_locals": 1,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "toStringValue",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/Object"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", 0, 2) -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", 2, 5) -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", 0, 0) -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", 0, 10) -> out of bounds"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", -1, 2) -> out of bounds"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, 0, 2) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The string is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 15,
+            "opr": "load",
+            "type": "int"
+          },
+          {
+            "index": 2,
+            "offset": 16,
+            "opr": "load",
+            "type": "int"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                "int",
+                "int"
+              ],
+              "name": "substring",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 17,
+            "opr": "invoke"
+          },
+          {
+            "offset": 20,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 274,
+            "offset": 0
+          },
+          {
+            "line": 275,
+            "offset": 2
+          },
+          {
+            "line": 277,
+            "offset": 7
+          }
+        ],
+        "max_locals": 3,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "substringValue",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "base": "int"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "base": "int"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The string is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [],
+              "name": "length",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "int"
+            },
+            "offset": 15,
+            "opr": "invoke"
+          },
+          {
+            "offset": 18,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 284,
+            "offset": 0
+          },
+          {
+            "line": 285,
+            "offset": 2
+          },
+          {
+            "line": 287,
+            "offset": 7
+          }
+        ],
+        "max_locals": 1,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "stringLength",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "int"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"he\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"world\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\", \"test\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null, \"test\") -> null pointer"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\", null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "is",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "index": 1,
+            "offset": 4,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 5,
+            "opr": "ifz",
+            "target": 9
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 8,
+            "opr": "new"
+          },
+          {
+            "offset": 11,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 12,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "One of the strings is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 14,
+            "opr": "invoke"
+          },
+          {
+            "offset": 17,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 18,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 1,
+            "offset": 19,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "startsWith",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": "boolean"
+            },
+            "offset": 20,
+            "opr": "invoke"
+          },
+          {
+            "offset": 23,
+            "opr": "return",
+            "type": "int"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 299,
+            "offset": 0
+          },
+          {
+            "line": 300,
+            "offset": 4
+          },
+          {
+            "line": 302,
+            "offset": 9
+          }
+        ],
+        "max_locals": 2,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 4,
+            "type": "same"
+          },
+          {
+            "index": 9,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "startsWithString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        },
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "base": "boolean"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"HELLO\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"Hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The string is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [],
+              "name": "toLowerCase",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 15,
+            "opr": "invoke"
+          },
+          {
+            "offset": 18,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 311,
+            "offset": 0
+          },
+          {
+            "line": 312,
+            "offset": 2
+          },
+          {
+            "line": 314,
+            "offset": 7
+          }
+        ],
+        "max_locals": 1,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "toLowerCaseString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
+      },
+      "typeparams": []
+    },
+    {
+      "access": [
+        "public",
+        "static"
+      ],
+      "annotations": [
+        {
+          "is_runtime_visible": true,
+          "type": "jpamb/utils/Cases",
+          "values": {
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"Hello\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"HELLO\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(\"\") -> ok"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "annotation",
+                  "value": {
+                    "type": "jpamb/utils/Case",
+                    "values": {
+                      "value": {
+                        "type": "string",
+                        "value": "(null) -> null pointer"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "code": {
+        "annotations": [],
+        "bytecode": [
+          {
+            "index": 0,
+            "offset": 0,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "condition": "isnot",
+            "offset": 1,
+            "opr": "ifz",
+            "target": 7
+          },
+          {
+            "class": "java/lang/NullPointerException",
+            "offset": 4,
+            "opr": "new"
+          },
+          {
+            "offset": 7,
+            "opr": "dup",
+            "words": 1
+          },
+          {
+            "offset": 8,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "The string is null"
+            }
+          },
+          {
+            "access": "special",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "is_interface": false,
+              "name": "<init>",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/NullPointerException"
+              },
+              "returns": null
+            },
+            "offset": 10,
+            "opr": "invoke"
+          },
+          {
+            "offset": 13,
+            "opr": "throw"
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "virtual",
+            "method": {
+              "args": [],
+              "name": "toUpperCase",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 15,
+            "opr": "invoke"
+          },
+          {
+            "offset": 18,
+            "opr": "return",
+            "type": "ref"
+          }
+        ],
+        "exceptions": [],
+        "lines": [
+          {
+            "line": 323,
+            "offset": 0
+          },
+          {
+            "line": 324,
+            "offset": 2
+          },
+          {
+            "line": 326,
+            "offset": 7
+          }
+        ],
+        "max_locals": 1,
+        "max_stack": 3,
+        "stack_map": [
+          {
+            "index": 7,
+            "type": "same"
+          }
+        ]
+      },
+      "default": null,
+      "exceptions": [],
+      "name": "toUpperCaseString",
+      "params": [
+        {
+          "annotations": [],
+          "type": {
+            "annotations": [],
+            "args": [],
+            "inner": null,
+            "kind": "class",
+            "name": "java/lang/String"
+          },
+          "visible": true
+        }
+      ],
+      "returns": {
+        "annotations": [],
+        "type": {
+          "args": [],
+          "inner": null,
+          "kind": "class",
+          "name": "java/lang/String"
+        }
       },
       "typeparams": []
     },

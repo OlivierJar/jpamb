@@ -1,4 +1,40 @@
-jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;)V ("admin") -> ok
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; ("", "") -> ok
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; ("", "world") -> ok
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; ("hello", "") -> ok
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; ("hello", "world") -> ok
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; ("hello", null) -> null pointer
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; (null, "world") -> null pointer
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("", "") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("", "test") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("hello world", "") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("hello world", "hello") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("hello world", "test") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("hello world", "world") -> ok
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z ("hello world", null) -> null pointer
+jpamb.cases.StringSQL.containsSubstring:(Ljava/lang/String;Ljava/lang/String;)Z (null, "test") -> null pointer
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z ("", "") -> ok
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "") -> ok
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "hello") -> ok
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "world") -> ok
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", null) -> null pointer
+jpamb.cases.StringSQL.contentEqualsString:(Ljava/lang/String;Ljava/lang/String;)Z (null, "hello") -> null pointer
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("", "") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("", "test") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "hello") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "lo") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "world") -> ok
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", null) -> null pointer
+jpamb.cases.StringSQL.endsWithString:(Ljava/lang/String;Ljava/lang/String;)Z (null, "test") -> null pointer
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z ("", "") -> ok
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "") -> ok
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "hello") -> ok
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "world") -> ok
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", null) -> null pointer
+jpamb.cases.StringSQL.equalsStrings:(Ljava/lang/String;Ljava/lang/String;)Z (null, "hello") -> null pointer
+jpamb.cases.StringSQL.isEmptyString:(Ljava/lang/String;)Z    ("") -> ok
+jpamb.cases.StringSQL.isEmptyString:(Ljava/lang/String;)Z    ("hello") -> ok
+jpamb.cases.StringSQL.isEmptyString:(Ljava/lang/String;)Z    (null) -> null pointer
 jpamb.cases.StringSQL.safeParameterizedQuery:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> ok
 jpamb.cases.StringSQL.safeString:(Ljava/lang/String;)V       ("hello") -> ok
 jpamb.cases.StringSQL.sqlInjectionBasic:(Ljava/lang/String;)Ljava/lang/String; ("' OR '1'='1") -> vulnerable
@@ -9,9 +45,26 @@ jpamb.cases.StringSQL.sqlInjectionLogin:(Ljava/lang/String;)Ljava/lang/String; (
 jpamb.cases.StringSQL.sqlInjectionOrderBy:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
 jpamb.cases.StringSQL.sqlInjectionUnion:(Ljava/lang/String;)Ljava/lang/String; ("' UNION SELECT password FROM admin--") -> vulnerable
 jpamb.cases.StringSQL.sqlInjectionUpdate:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("", "") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("", "test") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "he") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "hello") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", "world") -> ok
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z ("hello", null) -> null pointer
+jpamb.cases.StringSQL.startsWithString:(Ljava/lang/String;Ljava/lang/String;)Z (null, "test") -> null pointer
 jpamb.cases.StringSQL.stringBuilder:()V                      () -> ok
 jpamb.cases.StringSQL.stringComparison:(Ljava/lang/String;)V ("value") -> ok
+jpamb.cases.StringSQL.stringLength:(Ljava/lang/String;)I     ("") -> ok
+jpamb.cases.StringSQL.stringLength:(Ljava/lang/String;)I     ("hello") -> ok
+jpamb.cases.StringSQL.stringLength:(Ljava/lang/String;)I     (null) -> null pointer
 jpamb.cases.StringSQL.substringOperation:(Ljava/lang/String;)V ("test") -> ok
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; ("hello", -1, 2) -> out of bounds
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; ("hello", 0, 0) -> ok
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; ("hello", 0, 10) -> out of bounds
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; ("hello", 0, 2) -> ok
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; ("hello", 2, 5) -> ok
+jpamb.cases.StringSQL.substringValue:(Ljava/lang/String;II)Ljava/lang/String; (null, 0, 2) -> null pointer
 jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", -1) -> out of bounds
 jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", 1) -> ok
 jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", 5) -> out of bounds
@@ -30,4 +83,16 @@ jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String
 jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", "world") -> ok
 jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", null) -> null pointer
 jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V (null, "test") -> null pointer
+jpamb.cases.StringSQL.toLowerCaseString:(Ljava/lang/String;)Ljava/lang/String; ("") -> ok
+jpamb.cases.StringSQL.toLowerCaseString:(Ljava/lang/String;)Ljava/lang/String; ("HELLO") -> ok
+jpamb.cases.StringSQL.toLowerCaseString:(Ljava/lang/String;)Ljava/lang/String; ("Hello") -> ok
+jpamb.cases.StringSQL.toLowerCaseString:(Ljava/lang/String;)Ljava/lang/String; ("hello") -> ok
+jpamb.cases.StringSQL.toLowerCaseString:(Ljava/lang/String;)Ljava/lang/String; (null) -> null pointer
+jpamb.cases.StringSQL.toStringValue:(Ljava/lang/Object;)Ljava/lang/String; (123) -> ok
+jpamb.cases.StringSQL.toStringValue:(Ljava/lang/Object;)Ljava/lang/String; (null) -> null pointer
+jpamb.cases.StringSQL.toUpperCaseString:(Ljava/lang/String;)Ljava/lang/String; ("") -> ok
+jpamb.cases.StringSQL.toUpperCaseString:(Ljava/lang/String;)Ljava/lang/String; ("HELLO") -> ok
+jpamb.cases.StringSQL.toUpperCaseString:(Ljava/lang/String;)Ljava/lang/String; ("Hello") -> ok
+jpamb.cases.StringSQL.toUpperCaseString:(Ljava/lang/String;)Ljava/lang/String; ("hello") -> ok
+jpamb.cases.StringSQL.toUpperCaseString:(Ljava/lang/String;)Ljava/lang/String; (null) -> null pointer
 jpamb.cases.StringSQL.vulnerableQuery:(Ljava/lang/String;)Ljava/lang/String; ("admin' OR '1'='1") -> vulnerable
