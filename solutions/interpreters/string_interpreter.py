@@ -74,22 +74,26 @@ class Bytecode:
 
         return self.methods[pc.method][pc.offset]
 
-    def offset_to_index(self, method: jvm.Absolute[jvm.MethodID], offset: int) -> int:
-        """Convert bytecode offset to list index"""
+    def offset_to_index(self, method: jvm.Absolute[jvm.MethodID], target: int) -> int:
+        """Convert bytecode target (offset or instruction index) to list index"""
         if method not in self.offset_maps:
             opcodes = list(self.suite.method_opcodes(method))
             self.methods[method] = opcodes
             self.offset_maps[method] = {op.offset: i for i, op in enumerate(opcodes)}
 
-        index = self.offset_maps[method].get(offset)
+        # First try treating the target as a real bytecode offset
+        index = self.offset_maps[method].get(target)
         if index is None:
-            # If exact offset doesn't exist, find the next valid offset
-            # This can happen with optimized bytecode
+            # Some decompilers encode jump targets as instruction indexes.
+            if 0 <= target < len(self.methods[method]):
+                return target
+
+            # Fall back to the nearest valid offset (old behaviour)
             valid_offsets = sorted(self.offset_maps[method].keys())
             for valid_offset in valid_offsets:
-                if valid_offset >= offset:
+                if valid_offset >= target:
                     return self.offset_maps[method][valid_offset]
-            raise RuntimeError(f"Invalid offset {offset} in {method}")
+            raise RuntimeError(f"Invalid offset {target} in {method}")
         return index
 
 
@@ -363,6 +367,18 @@ class StringInterpreter:
                 exc = frame.stack.pop()
                 if exc.jvm_value.value is None:
                     return "null pointer"
+                # Inspect the actual exception object to classify outcome
+                exc_obj = state.heap.get(exc.jvm_value.value)
+                exc_class = None
+                if exc_obj and isinstance(exc_obj.jvm_value.value, dict):
+                    exc_class = exc_obj.jvm_value.value.get("class")
+                if isinstance(exc_class, jvm.ClassName):
+                    exc_class = str(exc_class)
+
+                if exc_class and "NullPointerException" in exc_class:
+                    return "null pointer"
+                if exc_class and "AssertionError" in exc_class:
+                    return "assertion error"
                 return "assertion error"
 
             case opcode.InvokeVirtual() | opcode.InvokeStatic() | opcode.InvokeSpecial() | opcode.InvokeInterface() | opcode.InvokeDynamic():
@@ -495,6 +511,17 @@ class StringInterpreter:
                         new_abs_str
                     )
                     frame.stack.push(result)
+                    return None
+            elif method_name == "contains" and len(args) > 0:
+                # String.contains handles null argument explicitly
+                substring = args[0]
+                if substring.jvm_value.value is None:
+                    return "null pointer"
+                if receiver and receiver.is_string():
+                    haystack = receiver.jvm_value.value or ""
+                    needle = substring.jvm_value.value
+                    contains = needle in haystack
+                    frame.stack.push(EnhancedValue.from_jvm(jvm.Value.boolean(contains)))
                     return None
             elif method_name == "substring":
                 # Substring extraction

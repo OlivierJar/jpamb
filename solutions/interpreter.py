@@ -129,17 +129,24 @@ class Bytecode:
         
         return self.methods[pc.method][pc.offset]
     
-    def offset_to_index(self, method: jvm.AbsMethodID, offset: int) -> int:
-        """Convert bytecode offset to list index"""
+    def offset_to_index(self, method: jvm.AbsMethodID, target: int) -> int:
+        """Convert bytecode target (offset or instruction index) to list index"""
         if method not in self.offset_maps:
             # Trigger loading
             opcodes = list(self.suite.method_opcodes(method))
             self.methods[method] = opcodes
             self.offset_maps[method] = {op.offset: i for i, op in enumerate(opcodes)}
         
-        index = self.offset_maps[method].get(offset)
+        index = self.offset_maps[method].get(target)
         if index is None:
-            raise RuntimeError(f"Invalid offset {offset} in {method}")
+            if 0 <= target < len(self.methods[method]):
+                return target
+
+            valid_offsets = sorted(self.offset_maps[method].keys())
+            for valid_offset in valid_offsets:
+                if valid_offset >= target:
+                    return self.offset_maps[method][valid_offset]
+            raise RuntimeError(f"Invalid offset {target} in {method}")
         return index
 
 
@@ -436,6 +443,17 @@ class Interpreter:
                 exc = frame.stack.pop()
                 if exc.value is None:
                     return "null pointer"
+                exc_obj = state.heap.get(exc.value)
+                exc_class = None
+                if exc_obj and isinstance(exc_obj.value, dict):
+                    exc_class = exc_obj.value.get("class")
+                if isinstance(exc_class, jvm.ClassName):
+                    exc_class = str(exc_class)
+
+                if exc_class and "NullPointerException" in exc_class:
+                    return "null pointer"
+                if exc_class and "AssertionError" in exc_class:
+                    return "assertion error"
                 return "assertion error"
 
             # ===== Method invocation (simplified) =====
