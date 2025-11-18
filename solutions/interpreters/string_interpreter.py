@@ -569,6 +569,27 @@ class StringInterpreter:
                     )
                     frame.stack.push(result)
                     return None
+            elif method_name == "length":
+                if receiver and receiver.is_string():
+                    value = receiver.jvm_value.value or ""
+                    frame.stack.push(EnhancedValue.from_jvm(jvm.Value.int(len(value))))
+                else:
+                    frame.stack.push(EnhancedValue.from_jvm(jvm.Value.int(0)))
+                return None
+            elif method_name == "charAt" and len(args) > 0:
+                if receiver and receiver.is_string():
+                    value = receiver.jvm_value.value or ""
+                    index = args[0].jvm_value.value
+                    if index < 0 or index >= len(value):
+                        return "out of bounds"
+                    ch = value[index]
+                    frame.stack.push(EnhancedValue.from_jvm(jvm.Value(jvm.Char(), ord(ch))))
+                    return None
+            elif method_name == "equals" and len(args) > 0:
+                other = args[0].jvm_value.value
+                current = receiver.jvm_value.value if receiver else None
+                frame.stack.push(EnhancedValue.from_jvm(jvm.Value.boolean(current == other)))
+                return None
         
         # SQL injection detection
         if self.detect_sql and ("Statement" in class_name or "Connection" in class_name):
@@ -613,6 +634,15 @@ class StringInterpreter:
             return "vulnerable"
 
         return None
+
+    @staticmethod
+    def _concat_abstract(
+        current: Optional[AbstractString],
+        addition: AbstractString,
+    ) -> AbstractString:
+        if current is None:
+            return addition
+        return current.concat(addition)
 
     @staticmethod
     def _looks_like_sql(query: Optional[str]) -> bool:
