@@ -11,6 +11,9 @@
         or with python:
     uv run jpamb test --filter "Simple" --with-python project.py
 
+#Test the interpreter
+    $ uv run interpreter.py "jpamb.cases.Simple.assertInteger:(I)V" "(1)"
+    $ uv run jpamb interpret -W --filter Simple interpreter.py
 #Improving Analyzer
     1.Find the class and method in the class in src/main/java/jpamb/cases/<class>.java.
         you might use a regular expression to find the content of a method. r"assertFalse.*{([^}]*)}" and pythons re library.
