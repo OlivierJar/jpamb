@@ -10,10 +10,9 @@ def test_suite_singleton():
 
 
 def test_cases_roundtrip():
-
     cases = []
 
-    with open("stats/cases.txt") as fp:
+    with open(model.Suite().case_file) as fp:
         for line in fp:
             methodid, input, _ = model.Case.match(line).groups()
             absmethod = jvm.AbsMethodID.decode(methodid)

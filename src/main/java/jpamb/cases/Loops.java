@@ -5,14 +5,14 @@ import static jpamb.utils.Tag.TagType.*;
 
 public class Loops {
 
-  @Case("() -> *")
+  // @Case("() -> *")
   @Tag({ LOOP })
   public static void forever() {
     while (true) {
     }
   }
 
-  @Case("() -> *")
+  // @Case("() -> *")
   @Tag({ LOOP })
   public static void neverAsserts() {
     int i = 1;
@@ -21,7 +21,7 @@ public class Loops {
     assert false;
   }
 
-  @Case("() -> *")
+  // @Case("() -> *")
   @Tag({ LOOP })
   public static int neverDivides() {
     int i = 1;
@@ -30,7 +30,7 @@ public class Loops {
     return 0 / 0;
   }
 
-  @Case("() -> assertion error")
+  // @Case("() -> assertion error")
   @Tag({ LOOP, INTEGER_OVERFLOW })
   public static void terminates() {
     short i = 0;

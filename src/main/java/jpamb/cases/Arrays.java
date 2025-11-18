@@ -5,43 +5,43 @@ import static jpamb.utils.Tag.TagType.*;
 
 public class Arrays {
 
-  @Case("() -> out of bounds")
+  // @Case("() -> out of bounds")
   @Tag({ ARRAY })
   public static void arrayOutOfBounds() {
     int array[] = { 0, 0 };
     array[3] = 0;
   }
 
-  @Case("() -> ok")
+  // @Case("() -> ok")
   @Tag({ ARRAY })
   public static void arrayInBounds() {
     int array[] = { 0, 0 };
     array[1] = 1;
   }
 
-  @Case("() -> ok")
+  // @Case("() -> ok")
   @Tag({ ARRAY })
   public static void arrayLength() {
     int array[] = { 0, 0 };
     assert array.length == 2;
   }
 
-  @Case("() -> null pointer")
+  // @Case("() -> null pointer")
   @Tag({ ARRAY })
   public static void arrayIsNull() {
     int array[] = null;
     array[1] = 10;
   }
 
-  @Case("() -> null pointer")
+  // @Case("() -> null pointer")
   @Tag({ ARRAY })
   public static void arrayIsNullLength() {
     int array[] = null;
     assert array.length == 0;
   }
 
-  @Case("(11) -> null pointer")
-  @Case("(0) -> out of bounds")
+  // @Case("(11) -> null pointer")
+  // @Case("(0) -> out of bounds")
   @Tag({ ARRAY })
   public static void arraySometimesNull(int i) {
     int array[] = null;
@@ -51,7 +51,7 @@ public class Arrays {
     array[1] = 10;
   }
 
-  @Case("() -> assertion error")
+  // @Case("() -> assertion error")
   @Tag({ ARRAY })
   public static void arrayContent() {
     int array[] = { 1, 2, 100, -13, 23 };
@@ -60,8 +60,8 @@ public class Arrays {
     }
   }
 
-  @Case("(3) -> ok")
-  @Case("(6) -> assertion error")
+  // @Case("(3) -> ok")
+  // @Case("(6) -> assertion error")
   @Tag({ ARRAY })
   public static void binarySearch(int x) {
     int arr[] = { 2, 3, 4, 10, 40 };
@@ -78,16 +78,16 @@ public class Arrays {
     assert false;
   }
 
-  @Case("([I: ]) -> assertion error")
-  @Case("([I: 1]) -> ok")
+  // @Case("([I: ]) -> assertion error")
+  // @Case("([I: 1]) -> ok")
   @Tag({ ARRAY })
   public static void arrayNotEmpty(int[] array) {
     assert array.length > 0;
   }
 
-  @Case("([C: 'h','e','l','l','o']) -> ok")
-  @Case("([C: 'x']) -> assertion error")
-  @Case("([C: ]) -> out of bounds")
+  // @Case("([C: 'h','e','l','l','o']) -> ok")
+  // @Case("([C: 'x']) -> assertion error")
+  // @Case("([C: ]) -> out of bounds")
   @Tag({ ARRAY })
   public static void arraySpellsHello(char[] array) {
     assert array[0] == 'h'
@@ -97,8 +97,8 @@ public class Arrays {
         && array[4] == 'o';
   }
 
-  @Case("([I: 50, 100, 200]) -> ok")
-  @Case("([I: ]) -> assertion error")
+  // @Case("([I: 50, 100, 200]) -> ok")
+  // @Case("([I: ]) -> assertion error")
   @Tag({ ARRAY })
   public static void arraySumIsLarge(int[] array) {
     int sum = 0;

@@ -1,0 +1,33 @@
+jpamb.cases.StringSQL.concatenateStrings:(Ljava/lang/String;)V ("admin") -> ok
+jpamb.cases.StringSQL.safeParameterizedQuery:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> ok
+jpamb.cases.StringSQL.safeString:(Ljava/lang/String;)V       ("hello") -> ok
+jpamb.cases.StringSQL.sqlInjectionBasic:(Ljava/lang/String;)Ljava/lang/String; ("' OR '1'='1") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionDelete:(Ljava/lang/String;)Ljava/lang/String; ("value") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionDropTable:(Ljava/lang/String;)Ljava/lang/String; ("1; DROP TABLE users--") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionInsert:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionLogin:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionOrderBy:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionUnion:(Ljava/lang/String;)Ljava/lang/String; ("' UNION SELECT password FROM admin--") -> vulnerable
+jpamb.cases.StringSQL.sqlInjectionUpdate:(Ljava/lang/String;)Ljava/lang/String; ("admin") -> vulnerable
+jpamb.cases.StringSQL.stringBuilder:()V                      () -> ok
+jpamb.cases.StringSQL.stringComparison:(Ljava/lang/String;)V ("value") -> ok
+jpamb.cases.StringSQL.substringOperation:(Ljava/lang/String;)V ("test") -> ok
+jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", -1) -> out of bounds
+jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", 1) -> ok
+jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      ("hello", 5) -> out of bounds
+jpamb.cases.StringSQL.testCharAt:(Ljava/lang/String;I)V      (null, 0) -> null pointer
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V ("", "") -> ok
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V ("", "world") -> ok
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V ("hello", "") -> ok
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V ("hello", "world") -> ok
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V ("hello", null) -> null pointer
+jpamb.cases.StringSQL.testConcatenateStrings:(Ljava/lang/String;Ljava/lang/String;)V (null, "world") -> null pointer
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("", "") -> ok
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("", "test") -> assertion error
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", "") -> ok
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", "hello") -> ok
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", "test") -> assertion error
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", "world") -> ok
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V ("hello world", null) -> null pointer
+jpamb.cases.StringSQL.testContainsSubstring:(Ljava/lang/String;Ljava/lang/String;)V (null, "test") -> null pointer
+jpamb.cases.StringSQL.vulnerableQuery:(Ljava/lang/String;)Ljava/lang/String; ("admin' OR '1'='1") -> vulnerable
