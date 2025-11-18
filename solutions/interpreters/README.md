@@ -9,4 +9,15 @@ uv run python string_interpreter.py \
 uv run string_interpreter.py "jpamb.cases.StringSQL.safeString:(Ljava/lang/String;)V" '("hello
 ")' --verbose 
 ```
---verbose shows full output
+
+### Example 3
+
+```bash
+uv run jpamb interpret -W solutions/interpreters/string_interpreter.py
+```
+
+### Example 4: run fuzzer 
+
+```bash
+uv run jpamb test -W solutions/sql_fuzzer.py
+```
