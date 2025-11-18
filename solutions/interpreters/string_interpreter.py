@@ -76,10 +76,14 @@ class Bytecode:
 
     def offset_to_index(self, method: jvm.Absolute[jvm.MethodID], target: int) -> int:
         """Convert bytecode target (offset or instruction index) to list index"""
-        if method not in self.offset_maps:
+        if method not in self.methods:
             opcodes = list(self.suite.method_opcodes(method))
             self.methods[method] = opcodes
-            self.offset_maps[method] = {op.offset: i for i, op in enumerate(opcodes)}
+        if 0 <= target < len(self.methods[method]):
+            return target
+
+        if method not in self.offset_maps:
+            self.offset_maps[method] = {op.offset: i for i, op in enumerate(self.methods[method])}
 
         # First try treating the target as a real bytecode offset
         index = self.offset_maps[method].get(target)
@@ -377,6 +381,12 @@ class StringInterpreter:
 
                 if exc_class and "NullPointerException" in exc_class:
                     return "null pointer"
+                if exc_class and (
+                    "ArrayIndexOutOfBoundsException" in exc_class
+                    or "StringIndexOutOfBoundsException" in exc_class
+                    or "IndexOutOfBoundsException" in exc_class
+                ):
+                    return "out of bounds"
                 if exc_class and "AssertionError" in exc_class:
                     return "assertion error"
                 return "assertion error"

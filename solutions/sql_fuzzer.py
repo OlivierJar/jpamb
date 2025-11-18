@@ -134,8 +134,26 @@ class SQLFuzzer:
         }
 
     def _generate_inputs(self) -> Iterator[tuple[jvm.Value, ...]]:
+        string_combos = list(self._string_payload_combos())
+        int_combos = list(self._int_payload_combos())
+
+        if not string_combos:
+            string_combos = [()]
+        if not int_combos:
+            int_combos = [()]
+
+        seen: set[tuple] = set()
+        for str_combo in string_combos:
+            for int_combo in int_combos:
+                args = self._build_args(str_combo, int_combo)
+                key = tuple(arg.value for arg in args)
+                if key in seen:
+                    continue
+                seen.add(key)
+                yield args
+
+    def _string_payload_combos(self) -> Iterator[tuple[Optional[str], ...]]:  # noqa: C901
         if not self.string_params:
-            yield tuple(self._default_value(t) for t in self.param_types)
             return
 
         string_param_count = len(self.string_params)
@@ -152,10 +170,11 @@ class SQLFuzzer:
         ]
 
         for combo in itertools.product(base_values, repeat=string_param_count):
-            if combo in seen:
+            combo_tuple = tuple(combo)
+            if combo_tuple in seen:
                 continue
-            seen.add(combo)
-            yield self._build_args(combo)
+            seen.add(combo_tuple)
+            yield combo_tuple
 
         attack_values: list[Optional[str]] = list(PAYLOADS)
         for _ in range(5):
@@ -173,14 +192,37 @@ class SQLFuzzer:
                 if combo_tuple in seen:
                     continue
                 seen.add(combo_tuple)
-                yield self._build_args(combo_tuple)
+                yield combo_tuple
 
-    def _build_args(self, combo: tuple[Optional[str], ...]) -> tuple[jvm.Value, ...]:
+    def _int_payload_combos(self) -> Iterator[tuple[int, ...]]:
+        int_params = [
+            idx
+            for idx, t in enumerate(self.param_types)
+            if isinstance(t, jvm.Int)
+        ]
+        if not int_params:
+            return
+
+        candidates = [0, 1, -1, 5]
+        yield from itertools.product(candidates, repeat=len(int_params))
+
+    def _build_args(
+        self,
+        string_combo: tuple[Optional[str], ...],
+        int_combo: tuple[int, ...],
+    ) -> tuple[jvm.Value, ...]:
         args: list[jvm.Value] = []
-        combo_iter = iter(combo)
+        string_iter = iter(string_combo)
+        int_iter = iter(int_combo)
         for idx, param in enumerate(self.param_types):
             if idx in self.string_params:
-                args.append(self._string_value(next(combo_iter)))
+                args.append(self._string_value(next(string_iter)))
+            elif isinstance(param, jvm.Int):
+                try:
+                    value = next(int_iter)
+                except StopIteration:
+                    value = 0
+                args.append(jvm.Value.int(value))
             else:
                 args.append(self._default_value(param))
         return tuple(args)
