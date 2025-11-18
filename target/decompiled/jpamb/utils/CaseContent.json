@@ -324,7 +324,7 @@
         "args": [
           {
             "type": "string",
-            "value": "Invalid case: \u0001"
+            "value": "\"\u0001\""
           }
         ],
         "handle": {
@@ -372,6 +372,58 @@
     },
     {
       "index": 6,
+      "method": {
+        "args": [
+          {
+            "type": "string",
+            "value": "Invalid case: \u0001"
+          }
+        ],
+        "handle": {
+          "handletype": "method",
+          "kind": "static",
+          "method": {
+            "args": [
+              {
+                "kind": "class",
+                "name": "java/lang/invoke/MethodHandles$Lookup"
+              },
+              {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              {
+                "kind": "class",
+                "name": "java/lang/invoke/MethodType"
+              },
+              {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              {
+                "kind": "array",
+                "type": {
+                  "kind": "class",
+                  "name": "java/lang/Object"
+                }
+              }
+            ],
+            "is_interface": false,
+            "name": "makeConcatWithConstants",
+            "ref": {
+              "kind": "class",
+              "name": "java/lang/invoke/StringConcatFactory"
+            },
+            "returns": {
+              "kind": "class",
+              "name": "java/lang/invoke/CallSite"
+            }
+          }
+        }
+      }
+    },
+    {
+      "index": 7,
       "method": {
         "args": [
           {
@@ -968,18 +1020,23 @@
             "type": "ref"
           },
           {
+            "condition": "isnot",
             "offset": 1,
-            "opr": "instanceof",
-            "type": {
-              "kind": "array",
-              "type": "int"
+            "opr": "ifz",
+            "target": 4
+          },
+          {
+            "offset": 4,
+            "opr": "push",
+            "value": {
+              "type": "string",
+              "value": "null"
             }
           },
           {
-            "condition": "eq",
-            "offset": 4,
-            "opr": "ifz",
-            "target": 10
+            "offset": 6,
+            "opr": "return",
+            "type": "ref"
           },
           {
             "index": 0,
@@ -989,6 +1046,26 @@
           },
           {
             "offset": 8,
+            "opr": "instanceof",
+            "type": {
+              "kind": "array",
+              "type": "int"
+            }
+          },
+          {
+            "condition": "eq",
+            "offset": 11,
+            "opr": "ifz",
+            "target": 14
+          },
+          {
+            "index": 0,
+            "offset": 14,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 15,
             "opr": "checkcast",
             "type": {
               "kind": "array",
@@ -1015,11 +1092,11 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 11,
+            "offset": 18,
             "opr": "invoke"
           },
           {
-            "offset": 14,
+            "offset": 21,
             "opr": "push",
             "value": {
               "type": "integer",
@@ -1042,7 +1119,7 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 15,
+            "offset": 22,
             "opr": "invoke"
           },
           {
@@ -1061,22 +1138,22 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 18,
+            "offset": 25,
             "opr": "invoke"
           },
           {
-            "offset": 23,
+            "offset": 30,
             "opr": "return",
             "type": "ref"
           },
           {
             "index": 0,
-            "offset": 24,
+            "offset": 31,
             "opr": "load",
             "type": "ref"
           },
           {
-            "offset": 25,
+            "offset": 32,
             "opr": "instanceof",
             "type": {
               "kind": "array",
@@ -1085,17 +1162,17 @@
           },
           {
             "condition": "eq",
-            "offset": 28,
+            "offset": 35,
             "opr": "ifz",
-            "target": 44
+            "target": 48
           },
           {
             "class": "java/util/ArrayList",
-            "offset": 31,
+            "offset": 38,
             "opr": "new"
           },
           {
-            "offset": 34,
+            "offset": 41,
             "opr": "dup",
             "words": 1
           },
@@ -1111,23 +1188,23 @@
               },
               "returns": null
             },
-            "offset": 35,
+            "offset": 42,
             "opr": "invoke"
           },
           {
             "index": 1,
-            "offset": 38,
+            "offset": 45,
             "opr": "store",
             "type": "ref"
           },
           {
             "index": 0,
-            "offset": 39,
+            "offset": 46,
             "opr": "load",
             "type": "ref"
           },
           {
-            "offset": 40,
+            "offset": 47,
             "opr": "checkcast",
             "type": {
               "kind": "array",
@@ -1136,28 +1213,28 @@
           },
           {
             "index": 2,
-            "offset": 43,
+            "offset": 50,
             "opr": "store",
             "type": "ref"
           },
           {
             "index": 2,
-            "offset": 44,
+            "offset": 51,
             "opr": "load",
             "type": "ref"
           },
           {
-            "offset": 45,
+            "offset": 52,
             "opr": "arraylength"
           },
           {
             "index": 3,
-            "offset": 46,
+            "offset": 53,
             "opr": "store",
             "type": "int"
           },
           {
-            "offset": 47,
+            "offset": 54,
             "opr": "push",
             "value": {
               "type": "integer",
@@ -1166,33 +1243,9 @@
           },
           {
             "index": 4,
-            "offset": 48,
+            "offset": 55,
             "opr": "store",
             "type": "int"
-          },
-          {
-            "index": 4,
-            "offset": 50,
-            "opr": "load",
-            "type": "int"
-          },
-          {
-            "index": 3,
-            "offset": 52,
-            "opr": "load",
-            "type": "int"
-          },
-          {
-            "condition": "ge",
-            "offset": 53,
-            "opr": "if",
-            "target": 39
-          },
-          {
-            "index": 2,
-            "offset": 56,
-            "opr": "load",
-            "type": "ref"
           },
           {
             "index": 4,
@@ -1201,25 +1254,49 @@
             "type": "int"
           },
           {
+            "index": 3,
             "offset": 59,
+            "opr": "load",
+            "type": "int"
+          },
+          {
+            "condition": "ge",
+            "offset": 60,
+            "opr": "if",
+            "target": 43
+          },
+          {
+            "index": 2,
+            "offset": 63,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "index": 4,
+            "offset": 64,
+            "opr": "load",
+            "type": "int"
+          },
+          {
+            "offset": 66,
             "opr": "array_load",
             "type": "char"
           },
           {
             "index": 5,
-            "offset": 60,
+            "offset": 67,
             "opr": "store",
             "type": "int"
           },
           {
             "index": 1,
-            "offset": 62,
+            "offset": 69,
             "opr": "load",
             "type": "ref"
           },
           {
             "index": 5,
-            "offset": 63,
+            "offset": 70,
             "opr": "load",
             "type": "int"
           },
@@ -1236,7 +1313,7 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 65,
+            "offset": 72,
             "opr": "invoke"
           },
           {
@@ -1255,28 +1332,28 @@
               },
               "returns": "boolean"
             },
-            "offset": 70,
+            "offset": 77,
             "opr": "invoke",
             "stack_size": 2
           },
           {
-            "offset": 75,
+            "offset": 82,
             "opr": "pop",
             "words": 1
           },
           {
             "amount": 1,
             "index": 4,
-            "offset": 76,
+            "offset": 83,
             "opr": "incr"
           },
           {
-            "offset": 79,
+            "offset": 86,
             "opr": "goto",
-            "target": 25
+            "target": 29
           },
           {
-            "offset": 82,
+            "offset": 89,
             "opr": "push",
             "value": {
               "type": "string",
@@ -1285,7 +1362,7 @@
           },
           {
             "index": 1,
-            "offset": 84,
+            "offset": 91,
             "opr": "load",
             "type": "ref"
           },
@@ -1313,7 +1390,7 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 85,
+            "offset": 92,
             "opr": "invoke"
           },
           {
@@ -1332,17 +1409,90 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 88,
+            "offset": 95,
             "opr": "invoke"
           },
           {
-            "offset": 93,
+            "offset": 100,
             "opr": "return",
             "type": "ref"
           },
           {
             "index": 0,
-            "offset": 94,
+            "offset": 101,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "offset": 102,
+            "opr": "instanceof",
+            "type": {
+              "kind": "class",
+              "name": "java/lang/String"
+            }
+          },
+          {
+            "condition": "eq",
+            "offset": 105,
+            "opr": "ifz",
+            "target": 55
+          },
+          {
+            "index": 0,
+            "offset": 108,
+            "opr": "load",
+            "type": "ref"
+          },
+          {
+            "access": "static",
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/Object"
+                }
+              ],
+              "is_interface": false,
+              "name": "valueOf",
+              "ref": {
+                "kind": "class",
+                "name": "java/lang/String"
+              },
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 109,
+            "opr": "invoke"
+          },
+          {
+            "access": "dynamic",
+            "index": 5,
+            "method": {
+              "args": [
+                {
+                  "kind": "class",
+                  "name": "java/lang/String"
+                }
+              ],
+              "name": "makeConcatWithConstants",
+              "returns": {
+                "kind": "class",
+                "name": "java/lang/String"
+              }
+            },
+            "offset": 112,
+            "opr": "invoke"
+          },
+          {
+            "offset": 117,
+            "opr": "return",
+            "type": "ref"
+          },
+          {
+            "index": 0,
+            "offset": 118,
             "opr": "load",
             "type": "ref"
           },
@@ -1360,11 +1510,11 @@
                 "name": "java/lang/String"
               }
             },
-            "offset": 95,
+            "offset": 119,
             "opr": "invoke"
           },
           {
-            "offset": 98,
+            "offset": 122,
             "opr": "return",
             "type": "ref"
           }
@@ -1377,46 +1527,66 @@
           },
           {
             "line": 21,
-            "offset": 3
+            "offset": 2
           },
           {
             "line": 22,
-            "offset": 10
+            "offset": 4
           },
           {
             "line": 23,
-            "offset": 13
+            "offset": 7
           },
           {
             "line": 24,
-            "offset": 17
+            "offset": 14
           },
           {
             "line": 25,
-            "offset": 32
+            "offset": 17
           },
           {
-            "line": 24,
-            "offset": 37
+            "line": 26,
+            "offset": 21
           },
           {
             "line": 27,
-            "offset": 39
+            "offset": 36
+          },
+          {
+            "line": 26,
+            "offset": 41
           },
           {
             "line": 29,
-            "offset": 44
+            "offset": 43
+          },
+          {
+            "line": 30,
+            "offset": 48
+          },
+          {
+            "line": 31,
+            "offset": 51
+          },
+          {
+            "line": 33,
+            "offset": 55
           }
         ],
         "max_locals": 6,
         "max_stack": 2,
         "stack_map": [
           {
-            "index": 10,
+            "index": 4,
             "type": "same"
           },
           {
-            "index": 25,
+            "index": 14,
+            "type": "same"
+          },
+          {
+            "index": 29,
             "locals": [
               {
                 "ref": {
@@ -1450,14 +1620,18 @@
             "type": "full_frame"
           },
           {
-            "index": 39,
+            "index": 43,
             "info": 3,
             "type": "chop_frame"
           },
           {
-            "index": 44,
+            "index": 48,
             "info": 1,
             "type": "chop_frame"
+          },
+          {
+            "index": 55,
+            "type": "same"
           }
         ]
       },
@@ -1799,7 +1973,7 @@
           },
           {
             "access": "dynamic",
-            "index": 5,
+            "index": 6,
             "method": {
               "args": [
                 {
@@ -1844,31 +2018,31 @@
         "exceptions": [],
         "lines": [
           {
-            "line": 35,
+            "line": 39,
             "offset": 0
           },
           {
-            "line": 36,
+            "line": 40,
             "offset": 3
           },
           {
-            "line": 38,
+            "line": 42,
             "offset": 7
           },
           {
-            "line": 39,
+            "line": 43,
             "offset": 10
           },
           {
-            "line": 40,
+            "line": 44,
             "offset": 14
           },
           {
-            "line": 41,
+            "line": 45,
             "offset": 18
           },
           {
-            "line": 43,
+            "line": 47,
             "offset": 26
           }
         ],
@@ -1941,7 +2115,7 @@
           },
           {
             "access": "dynamic",
-            "index": 6,
+            "index": 7,
             "method": {
               "args": [
                 {
@@ -2007,7 +2181,7 @@
           },
           {
             "access": "dynamic",
-            "index": 6,
+            "index": 7,
             "method": {
               "args": [
                 {

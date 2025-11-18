@@ -47,10 +47,20 @@ except ImportError:
 @dataclass
 class Bytecode:
     """Bytecode context"""
-    
+
     suite: Suite
     methods: dict[jvm.Absolute[jvm.MethodID], list[opcode.Opcode]] = field(default_factory=dict)
     offset_maps: dict[jvm.Absolute[jvm.MethodID], dict[int, int]] = field(default_factory=dict)
+    class_data: dict[jvm.ClassName, dict] = field(default_factory=dict)
+
+    def get_class_data(self, classname: jvm.ClassName) -> dict:
+        """Get class data including bootstrap methods"""
+        if classname not in self.class_data:
+            import json
+            path = self.suite.decompiledfile(classname)
+            with open(path) as f:
+                self.class_data[classname] = json.load(f)
+        return self.class_data[classname]
 
     def __getitem__(self, pc: PC) -> opcode.Opcode:
         """Get bytecode instruction at PC"""
@@ -58,21 +68,27 @@ class Bytecode:
             opcodes = list(self.suite.method_opcodes(pc.method))
             self.methods[pc.method] = opcodes
             self.offset_maps[pc.method] = {op.offset: i for i, op in enumerate(opcodes)}
-        
+
         if pc.offset < 0 or pc.offset >= len(self.methods[pc.method]):
             raise RuntimeError(f"Invalid index {pc.offset} in {pc.method}")
-        
+
         return self.methods[pc.method][pc.offset]
-    
+
     def offset_to_index(self, method: jvm.Absolute[jvm.MethodID], offset: int) -> int:
         """Convert bytecode offset to list index"""
         if method not in self.offset_maps:
             opcodes = list(self.suite.method_opcodes(method))
             self.methods[method] = opcodes
             self.offset_maps[method] = {op.offset: i for i, op in enumerate(opcodes)}
-        
+
         index = self.offset_maps[method].get(offset)
         if index is None:
+            # If exact offset doesn't exist, find the next valid offset
+            # This can happen with optimized bytecode
+            valid_offsets = sorted(self.offset_maps[method].keys())
+            for valid_offset in valid_offsets:
+                if valid_offset >= offset:
+                    return self.offset_maps[method][valid_offset]
             raise RuntimeError(f"Invalid offset {offset} in {method}")
         return index
 
@@ -190,6 +206,12 @@ class StringInterpreter:
             case opcode.Dup(words=1):
                 v = frame.stack.peek()
                 frame.stack.push(v)
+                frame.pc += 1
+
+            case opcode.Pop():
+                # Pop value(s) from stack and discard
+                for _ in range(op.words):
+                    frame.stack.pop()
                 frame.pc += 1
 
             case opcode.NewArray(type=t, dim=1):
@@ -340,7 +362,7 @@ class StringInterpreter:
                     return "null pointer"
                 return "assertion error"
 
-            case opcode.InvokeVirtual() | opcode.InvokeStatic() | opcode.InvokeSpecial() | opcode.InvokeInterface():
+            case opcode.InvokeVirtual() | opcode.InvokeStatic() | opcode.InvokeSpecial() | opcode.InvokeInterface() | opcode.InvokeDynamic():
                 result = self._handle_method_invocation(op, state)
                 if isinstance(result, str):
                     return result
@@ -354,14 +376,78 @@ class StringInterpreter:
     def _handle_method_invocation(self, op, state: State) -> Optional[str]:
         """Handle method invocations with special handling for string and SQL operations"""
         frame = state.frames.peek()
+
+        # Handle InvokeDynamic separately
+        if isinstance(op, opcode.InvokeDynamic):
+            method_name = op.method.get("name", "")
+
+            # Handle string concatenation via invokedynamic
+            if method_name == "makeConcatWithConstants":
+                # Pop all arguments
+                num_args = len(op.method.get("args", []))
+                args = []
+                for _ in range(num_args):
+                    args.insert(0, frame.stack.pop())
+
+                # Get the bootstrap method template
+                bootstrap_index = op.index
+                class_data = self.bc.get_class_data(frame.pc.method.classname)
+                bootstrap_methods = class_data.get("bootstrapmethods", [])
+                template = ""
+
+                for bm in bootstrap_methods:
+                    if bm.get("index") == bootstrap_index:
+                        # Get the template string from bootstrap method args
+                        bm_args = bm.get("method", {}).get("args", [])
+                        if bm_args and isinstance(bm_args[0], dict) and bm_args[0].get("type") == "string":
+                            template = bm_args[0].get("value", "")
+                        break
+
+                # Build the concatenated string using the template
+                result_value = template
+                result_abstract = AbstractString.constant(template)
+
+                # Replace placeholders with arguments
+                for i, arg in enumerate(args, start=1):
+                    placeholder = chr(i)  # \u0001, \u0002, etc.
+
+                    if arg.is_string():
+                        arg_value = str(arg.jvm_value.value)
+                        result_value = result_value.replace(placeholder, arg_value)
+
+                        # Track taint propagation
+                        if arg.abstract_string.tainted:
+                            # Build abstract string with proper concatenation tracking
+                            parts = template.split(placeholder)
+                            if len(parts) == 2:
+                                result_abstract = AbstractString.constant(parts[0]).concat(arg.abstract_string).concat(AbstractString.constant(parts[1]))
+                    else:
+                        arg_value = str(arg.jvm_value.value)
+                        result_value = result_value.replace(placeholder, arg_value)
+
+                # Push concatenated result
+                result = EnhancedValue(
+                    jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), result_value),
+                    result_abstract
+                )
+                frame.stack.push(result)
+                return None
+
+            # For other invokedynamic, push default return value
+            if "returns" in op.method and op.method["returns"]:
+                return_type_json = op.method["returns"]
+                return_type = jvm.Type.from_json_type(return_type_json)
+                frame.stack.push(self._default_value(return_type))
+            return None
+
         method = op.method
         num_args = len(method.extension.params)
-        
+
         # Pop arguments
         args = []
         for _ in range(num_args):
             args.insert(0, frame.stack.pop())
-        
+
         # Pop receiver for non-static
         receiver = None
         if not isinstance(op, opcode.InvokeStatic):
@@ -469,7 +555,7 @@ class StringInterpreter:
         # Create initial frame with enhanced values
         locals = {}
         for i, arg in enumerate(args):
-            if taint_params and isinstance(arg.type, jvm.Object) and "String" in str(arg.type.classname):
+            if taint_params and isinstance(arg.type, jvm.Object) and "String" in str(arg.type.name):
                 # Mark string parameters as tainted user input
                 locals[i] = EnhancedValue.string_input(arg.value)
             else:

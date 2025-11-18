@@ -41,6 +41,8 @@ class Opcode(ABC):
                 opr = NewArray
             case "dup":
                 opr = Dup
+            case "pop":
+                opr = Pop
             case "array_store":
                 opr = ArrayStore
             case "array_load":
@@ -81,6 +83,8 @@ class Opcode(ABC):
                         opr = InvokeInterface
                     case "special":
                         opr = InvokeSpecial
+                    case "dynamic":
+                        opr = InvokeDynamic
                     case access:
                         raise NotImplementedError(
                             f"Unhandled invoke access {access!r} (implement yourself)"
@@ -148,6 +152,9 @@ class Push(Opcode):
             case jvm.Reference():
                 assert self.value.value is None, f"what is {self.value}"
                 return "aconst_null"
+            case jvm.Object():
+                # Handle String constants and other object constants
+                return f"ldc \"{self.value.value}\""
 
         raise NotImplementedError(f"Unhandled {self!r}")
 
@@ -170,6 +177,9 @@ class Push(Opcode):
                     return "ldc"
             case jvm.Reference():
                 return "aconst_null"
+            case jvm.Object():
+                # Handle String constants and other object constants
+                return "ldc"
 
         raise NotImplementedError(f"Unhandled {self!r}")
 
@@ -249,6 +259,38 @@ class Dup(Opcode):
 
     def __str__(self):
         return f"dup {self.words}"
+
+
+@dataclass(frozen=True, order=True)
+class Pop(Opcode):
+    """The pop opcode that removes value(s) from the stack"""
+
+    words: int = 1
+
+    @classmethod
+    def from_json(cls, json: dict) -> Opcode:
+        return cls(
+            offset=json["offset"],
+            words=json.get("words", 1),
+        )
+
+    def real(self) -> str:
+        if self.words == 1:
+            return "pop"
+        elif self.words == 2:
+            return "pop2"
+        return super().real()
+
+    def semantics(self) -> str | None:
+        return None
+
+    def mnemonic(self) -> str:
+        return self.real()
+
+    def __str__(self):
+        if self.words == 1:
+            return "pop"
+        return f"pop{self.words}"
 
 
 @dataclass(frozen=True, order=True)
@@ -541,6 +583,44 @@ class InvokeSpecial(Opcode):
     def __str__(self):
         interface_str = " interface" if self.is_interface else ""
         return f"invoke special{interface_str} {self.method}"
+
+
+@dataclass(frozen=True, order=True)
+class InvokeDynamic(Opcode):
+    """The invoke dynamic opcode for dynamic method invocation.
+
+    Used for Java 7+ invokedynamic instruction, commonly used for:
+    - Lambda expressions
+    - String concatenation (Java 9+)
+    - Method handles
+    """
+
+    method: dict  # Method info for invokedynamic
+    index: int  # Bootstrap method table index
+
+    @classmethod
+    def from_json(cls, json: dict) -> "Opcode":
+        assert json["opr"] == "invoke" and json["access"] == "dynamic"
+
+        return cls(
+            offset=json["offset"],
+            method=json["method"],
+            index=json.get("index", 0),
+        )
+
+    def real(self) -> str:
+        method_name = self.method.get("name", "unknown")
+        return f"invokedynamic {method_name}"
+
+    def semantics(self) -> str | None:
+        return None
+
+    def mnemonic(self) -> str:
+        return "invokedynamic"
+
+    def __str__(self):
+        method_name = self.method.get("name", "unknown")
+        return f"invoke dynamic {method_name}"
 
 
 @dataclass(frozen=True, order=True)

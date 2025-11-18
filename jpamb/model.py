@@ -186,6 +186,7 @@ QUERIES = (
     "null pointer",
     "ok",
     "out of bounds",
+    "vulnerable",
 )
 
 
