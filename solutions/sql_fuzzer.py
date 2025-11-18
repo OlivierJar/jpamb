@@ -14,7 +14,8 @@ from __future__ import annotations
 import sys
 import random
 from pathlib import Path
-from typing import Iterator
+import itertools
+from typing import Iterator, Optional
 from collections import Counter
 
 repo_root = Path(__file__).resolve().parent.parent
@@ -28,6 +29,7 @@ from solutions.interpreters.string_interpreter import SQLQuery, EnhancedValue  #
 PAYLOADS = [
     "",
     "hello",
+    "world",
     "admin",
     "test@example.com",
     "' OR '1'='1",
@@ -133,25 +135,57 @@ class SQLFuzzer:
 
     def _generate_inputs(self) -> Iterator[tuple[jvm.Value, ...]]:
         if not self.string_params:
-            return iter(())
+            yield tuple(self._default_value(t) for t in self.param_types)
+            return
 
-        payloads = list(PAYLOADS)
-        # Add a handful of deterministic fuzzed payloads.
-        for i in range(5):
+        string_param_count = len(self.string_params)
+        seen: set[tuple[Optional[str], ...]] = set()
+
+        base_values: list[Optional[str]] = [
+            "",
+            "hello",
+            "world",
+            "test",
+            "admin",
+            "' OR '1'='1",
+            None,
+        ]
+
+        for combo in itertools.product(base_values, repeat=string_param_count):
+            if combo in seen:
+                continue
+            seen.add(combo)
+            yield self._build_args(combo)
+
+        attack_values: list[Optional[str]] = list(PAYLOADS)
+        for _ in range(5):
             base = self.random.choice(PAYLOADS)
             fuzz = f"{base}{self.random.randint(0, 999)}'--"
-            payloads.append(fuzz)
+            attack_values.append(fuzz)
+        attack_values.append(None)
 
-        for payload in payloads:
-            args = []
-            for idx, param in enumerate(self.param_types):
-                if idx in self.string_params:
-                    args.append(self._string_value(payload))
-                else:
-                    args.append(self._default_value(param))
-            yield tuple(args)
+        default_combo = [""] * string_param_count
+        for param_index in range(string_param_count):
+            for payload in attack_values:
+                combo = list(default_combo)
+                combo[param_index] = payload
+                combo_tuple = tuple(combo)
+                if combo_tuple in seen:
+                    continue
+                seen.add(combo_tuple)
+                yield self._build_args(combo_tuple)
 
-    def _string_value(self, value: str) -> jvm.Value:
+    def _build_args(self, combo: tuple[Optional[str], ...]) -> tuple[jvm.Value, ...]:
+        args: list[jvm.Value] = []
+        combo_iter = iter(combo)
+        for idx, param in enumerate(self.param_types):
+            if idx in self.string_params:
+                args.append(self._string_value(next(combo_iter)))
+            else:
+                args.append(self._default_value(param))
+        return tuple(args)
+
+    def _string_value(self, value: Optional[str]) -> jvm.Value:
         return jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), value)
 
     def _default_value(self, t: jvm.Type) -> jvm.Value:

@@ -422,32 +422,44 @@ class StringInterpreter:
                             template = bm_args[0].get("value", "")
                         break
 
-                # Build the concatenated string using the template
-                result_value = template
-                result_abstract = AbstractString.constant(template)
+                result_segments: list[str] = []
+                current_abs: Optional[AbstractString] = None
+                cursor = 0
 
-                # Replace placeholders with arguments
                 for i, arg in enumerate(args, start=1):
-                    placeholder = chr(i)  # \u0001, \u0002, etc.
+                    placeholder = chr(i)
+                    pos = template.find(placeholder, cursor)
+                    if pos == -1:
+                        continue
 
-                    if arg.is_string():
-                        arg_value = str(arg.jvm_value.value)
-                        result_value = result_value.replace(placeholder, arg_value)
+                    literal = template[cursor:pos]
+                    if literal:
+                        result_segments.append(literal)
+                        current_abs = self._concat_abstract(current_abs, AbstractString.constant(literal))
 
-                        # Track taint propagation
-                        if arg.abstract_string.tainted:
-                            # Build abstract string with proper concatenation tracking
-                            parts = template.split(placeholder)
-                            if len(parts) == 2:
-                                result_abstract = AbstractString.constant(parts[0]).concat(arg.abstract_string).concat(AbstractString.constant(parts[1]))
-                    else:
+                    arg_value = ""
+                    if arg.jvm_value.value is not None:
                         arg_value = str(arg.jvm_value.value)
-                        result_value = result_value.replace(placeholder, arg_value)
+                    result_segments.append(arg_value)
+
+                    arg_abs = arg.abstract_string or AbstractString.constant(arg_value)
+                    current_abs = self._concat_abstract(current_abs, arg_abs)
+                    cursor = pos + 1
+
+                if cursor < len(template):
+                    tail = template[cursor:]
+                    result_segments.append(tail)
+                    if tail:
+                        current_abs = self._concat_abstract(current_abs, AbstractString.constant(tail))
+
+                result_value = "".join(result_segments)
+                if current_abs is None:
+                    current_abs = AbstractString.constant(result_value)
 
                 # Push concatenated result
                 result = EnhancedValue(
                     jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), result_value),
-                    result_abstract
+                    current_abs
                 )
                 frame.stack.push(result)
                 return None
@@ -479,8 +491,29 @@ class StringInterpreter:
         class_name = str(method.classname)
         
         if class_name == "jpamb/cases/StringSQL" and method_name == "detectVulnerability":
-            # The runtime helper throws when it detects SQL injection.
-            # We handle vulnerability reporting separately, so treat as a no-op.
+            if not args:
+                return None
+
+            query_arg = args[0]
+            query_value = query_arg.jvm_value.value or ""
+            abstract_query = query_arg.abstract_string or AbstractString.constant(query_value)
+            query = SQLQuery(query_string=abstract_query, is_parameterized=False)
+            state.record_sql_query(query)
+
+            raw_inputs: list[str] = []
+            if len(args) > 1:
+                array_ref = args[1]
+                if array_ref.jvm_value.value is not None:
+                    arr_value = state.heap.get(array_ref.jvm_value.value)
+                    if arr_value and isinstance(arr_value.jvm_value.value, list):
+                        for element in arr_value.jvm_value.value:
+                            if isinstance(element, str):
+                                raw_inputs.append(element)
+
+            contains_input = any(inp and inp in query_value for inp in raw_inputs)
+            if contains_input or query.is_vulnerable():
+                state.vulnerabilities.append("detectVulnerability helper flagged SQL injection")
+                return "vulnerable"
             return None
 
         if "StringBuilder" in class_name or "StringBuffer" in class_name:
