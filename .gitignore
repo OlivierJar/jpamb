@@ -25,3 +25,6 @@ build/
 leananalyzer
 
 result
+
+# Ignore files from the target/cases directory
+target/cases/*
