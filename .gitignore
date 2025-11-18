@@ -28,3 +28,9 @@ result
 
 # Ignore files from the target/cases directory
 target/cases/*
+
+# Ignore decompiled jpamb files
+jpamb/decompiled/
+
+# Ignore stats files
+stats/
