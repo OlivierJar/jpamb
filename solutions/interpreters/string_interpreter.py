@@ -569,12 +569,17 @@ class StringInterpreter:
             elif method_name == "substring":
                 # Substring extraction
                 if receiver and receiver.is_string():
+                    value = receiver.jvm_value.value or ""
                     start = args[0].jvm_value.value if len(args) > 0 else 0
-                    end = args[1].jvm_value.value if len(args) > 1 else None
+                    end = args[1].jvm_value.value if len(args) > 1 else len(value)
+                    
+                    if start < 0 or end < 0 or start > end or end > len(value):
+                        return "out of bounds"
+                    
                     new_abs_str = receiver.abstract_string.substring(start, end)
                     result = EnhancedValue(
                         jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")),
-                                receiver.jvm_value.value[start:end]),
+                                value[start:end]),
                         new_abs_str
                     )
                     frame.stack.push(result)
