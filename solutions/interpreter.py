@@ -9,11 +9,11 @@ This interpreter extends the basic JVM interpreter with:
 4. Abstract string domain for symbolic representation
 
 Usage:
-    python string_interpreter.py "ClassName.methodName:(params)returnType" "(arg1, arg2, ...)"
+    python interpreter.py "ClassName.methodName:(params)returnType" "(arg1, arg2, ...)"
     
 Example:
 
-    python string_interpreter.py "jpamb.cases.SQLTest.executeQuery:(Ljava/lang/String;)V" "(\"admin\")"
+    python interpreter.py "jpamb.cases.SQLTest.executeQuery:(Ljava/lang/String;)V" "(\"admin\")"
 """
 
 import sys
@@ -35,7 +35,7 @@ try:
     from jpamb.model import Suite, Input
 except ImportError:
     print("Error: jpamb was not found", file=sys.stderr)
-    print("Please run with: cd solutions/interpreters && uv run python string_interpreter.py <args>", file=sys.stderr)
+    print("Please run with: cd solutions/interpreters && uv run python interpreter.py <args>", file=sys.stderr)
     sys.exit(1)
 
 
@@ -763,8 +763,8 @@ class StringInterpreter:
 
 def main():
     if len(sys.argv) < 3:
-        print("Usage: python string_interpreter.py <method> <input> [--verbose] [--no-sql-check]", file=sys.stderr)
-        print('Example: python string_interpreter.py "jpamb.cases.Simple.assertFalse:()V" "()"', file=sys.stderr)
+        print("Usage: python interpreter.py <method> <input> [--verbose] [--no-sql-check]", file=sys.stderr)
+        print('Example: python interpreter.py "jpamb.cases.Simple.assertFalse:()V" "()"', file=sys.stderr)
         sys.exit(1)
     
     method_str = sys.argv[1]
@@ -773,7 +773,7 @@ def main():
     detect_sql = "--no-sql-check" not in sys.argv
     
     script_dir = Path(__file__).parent
-    workspace = script_dir.parent.parent
+    workspace = script_dir.parent
     
     suite = Suite(workspace)
     
