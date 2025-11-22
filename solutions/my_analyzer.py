@@ -23,8 +23,8 @@ sys.path.insert(0, str(repo_root))
 
 from jpamb import jvm
 from jpamb.model import Suite
-from solutions.interpreters.string_interpreter import StringInterpreter
-from solutions.interpreters.string_interpreter import SQLQuery, EnhancedValue  # noqa: F401
+from solutions.interpreter import StringInterpreter
+from solutions.interpreter import SQLQuery, EnhancedValue  # noqa: F401
 
 PAYLOADS = [
     "",
@@ -86,12 +86,16 @@ class SQLFuzzer:
             for idx, t in enumerate(self.param_types)
             if isinstance(t, jvm.Object) and "String" in str(t.name)
         ]
+        self.object_params = [
+            idx
+            for idx, t in enumerate(self.param_types)
+            if isinstance(t, jvm.Object) and "String" not in str(t.name)
+        ]
         self.random = random.Random(42)
 
     def run(self) -> dict:
         inputs = list(self._generate_inputs())
         if not inputs:
-            # Ensure we run at least once even if no String params.
             inputs.append(tuple(self._default_value(t) for t in self.param_types))
 
         results = []
@@ -136,21 +140,25 @@ class SQLFuzzer:
     def _generate_inputs(self) -> Iterator[tuple[jvm.Value, ...]]:
         string_combos = list(self._string_payload_combos())
         int_combos = list(self._int_payload_combos())
+        object_combos = list(self._object_payload_combos())
 
         if not string_combos:
             string_combos = [()]
         if not int_combos:
             int_combos = [()]
+        if not object_combos:
+            object_combos = [()]
 
         seen: set[tuple] = set()
         for str_combo in string_combos:
             for int_combo in int_combos:
-                args = self._build_args(str_combo, int_combo)
-                key = tuple(arg.value for arg in args)
-                if key in seen:
-                    continue
-                seen.add(key)
-                yield args
+                for obj_combo in object_combos:
+                    args = self._build_args(str_combo, int_combo, obj_combo)
+                    key = tuple(arg.value for arg in args)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    yield args
 
     def _string_payload_combos(self) -> Iterator[tuple[Optional[str], ...]]:  # noqa: C901
         if not self.string_params:
@@ -203,17 +211,26 @@ class SQLFuzzer:
         if not int_params:
             return
 
-        candidates = [0, 1, -1, 5]
+        candidates = [0, 1, -1, 5, 10, 100, -100]
         yield from itertools.product(candidates, repeat=len(int_params))
+
+    def _object_payload_combos(self) -> Iterator[tuple[Optional[int], ...]]:
+        if not self.object_params:
+            return
+
+        candidates = [None, 123, 456, 0, -1]
+        yield from itertools.product(candidates, repeat=len(self.object_params))
 
     def _build_args(
         self,
         string_combo: tuple[Optional[str], ...],
         int_combo: tuple[int, ...],
+        object_combo: tuple[Optional[int], ...],
     ) -> tuple[jvm.Value, ...]:
         args: list[jvm.Value] = []
         string_iter = iter(string_combo)
         int_iter = iter(int_combo)
+        object_iter = iter(object_combo)
         for idx, param in enumerate(self.param_types):
             if idx in self.string_params:
                 args.append(self._string_value(next(string_iter)))
@@ -223,6 +240,12 @@ class SQLFuzzer:
                 except StopIteration:
                     value = 0
                 args.append(jvm.Value.int(value))
+            elif idx in self.object_params:
+                try:
+                    obj_value = next(object_iter)
+                except StopIteration:
+                    obj_value = None
+                args.append(jvm.Value(param, obj_value))
             else:
                 args.append(self._default_value(param))
         return tuple(args)
@@ -230,7 +253,7 @@ class SQLFuzzer:
     def _string_value(self, value: Optional[str]) -> jvm.Value:
         return jvm.Value(jvm.Object(jvm.ClassName.decode("java/lang/String")), value)
 
-    def _default_value(self, t: jvm.Type) -> jvm.Value:
+    def _default_value(self, t: jvm.Type, allow_null: bool = True) -> jvm.Value:
         match t:
             case jvm.Int():
                 return jvm.Value.int(0)
@@ -247,6 +270,8 @@ class SQLFuzzer:
             case jvm.Object(obj_type):
                 if "String" in str(obj_type.name):
                     return self._string_value("")
+                if not allow_null:
+                    return jvm.Value(t, 123)
                 return jvm.Value(t, None)
             case _:
                 return jvm.Value(t, None)
