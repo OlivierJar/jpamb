@@ -26,19 +26,74 @@ from jpamb.model import Suite
 from solutions.interpreter import StringInterpreter
 from solutions.interpreter import SQLQuery, EnhancedValue  # noqa: F401
 
-PAYLOADS = [
-    "",
-    "hello",
-    "world",
-    "admin",
-    "test@example.com",
-    "' OR '1'='1",
-    "\" OR \"1\"=\"1",
-    "1; DROP TABLE users--",
-    "' UNION SELECT password FROM users--",
-    "'; EXEC xp_cmdshell('whoami'); --",
-    "abc'); DELETE FROM accounts; --",
+CORE_PAYLOADS = {
+    "benign": [
+        "",
+        "hello",
+        "admin",
+        "test@example.com",
+    ],
+
+    "boolean_based": [
+        " OR 1=1",
+        " OR 'x'='x",
+        " AND 1=1",
+        " AND 1=2",
+    ],
+
+    "union_based": [
+        " UNION SELECT NULL",
+        " UNION SELECT NULL,NULL",
+        " UNION SELECT NULL, NULL, NULL",
+        " UNION SELECT password FROM users",
+    ],
+
+    "stacked_queries": [
+        "; DROP TABLE users",
+        "; INSERT INTO logs VALUES('hacked')",
+        "; UPDATE users SET role='admin'",
+    ],
+
+    "time_based": [
+        " OR SLEEP(5)",
+        "; WAITFOR DELAY '00:00:05'",
+    ],
+
+    "command_injection": [
+        "; EXEC xp_cmdshell('whoami');",
+    ],
+}
+
+SUFFIXES = [
+    "--",
+    "#",
+    "/*",
 ]
+
+CONTEXT_PREFIXES = {
+    "quoted_single": [
+        "'",
+        "' ",
+        "admin'",
+    ],
+
+    "quoted_double": [
+        "\"",
+        "\" ",
+        "admin\"",
+    ],
+
+    "numeric": [
+        "-1",
+        "0",
+        "1",
+        "999",
+    ],
+
+    "none": [
+        "",
+    ],
+}
 
 QUERY_KEYWORDS = (
     "select",
@@ -167,15 +222,7 @@ class SQLFuzzer:
         string_param_count = len(self.string_params)
         seen: set[tuple[Optional[str], ...]] = set()
 
-        base_values: list[Optional[str]] = [
-            "",
-            "hello",
-            "world",
-            "test",
-            "admin",
-            "' OR '1'='1",
-            None,
-        ]
+        base_values: list[Optional[str]] = CORE_PAYLOADS["benign"] + [None]
 
         for combo in itertools.product(base_values, repeat=string_param_count):
             combo_tuple = tuple(combo)
@@ -184,11 +231,21 @@ class SQLFuzzer:
             seen.add(combo_tuple)
             yield combo_tuple
 
-        attack_values: list[Optional[str]] = list(PAYLOADS)
-        for _ in range(5):
-            base = self.random.choice(PAYLOADS)
-            fuzz = f"{base}{self.random.randint(0, 999)}'--"
+        attack_values: list[Optional[str]] = []
+        for category_payloads in CORE_PAYLOADS.values():
+            attack_values.extend(category_payloads)
+
+        for _ in range(10):
+            category = self.random.choice(list(CORE_PAYLOADS.keys()))
+            if category == "benign":
+                continue
+            base = self.random.choice(CORE_PAYLOADS[category])
+            prefix_category = self.random.choice(list(CONTEXT_PREFIXES.keys()))
+            prefix = self.random.choice(CONTEXT_PREFIXES[prefix_category])
+            suffix = self.random.choice(SUFFIXES)
+            fuzz = f"{prefix}{base}{suffix}"
             attack_values.append(fuzz)
+
         attack_values.append(None)
 
         default_combo = [""] * string_param_count
