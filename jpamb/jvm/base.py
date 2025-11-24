@@ -741,6 +741,9 @@ class AbsMethodID(Absolute[MethodID]):
     def methodid(self):
         return self.extension
 
+    def dashed(self) -> str:
+        return f"{self.classname.slashed()}.{self.extension.encode()}"
+
     @classmethod
     def from_json(cls, json: dict) -> Self:
         return cls(
