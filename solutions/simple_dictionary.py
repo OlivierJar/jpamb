@@ -89,32 +89,68 @@ def analyze_method(method_str: str) -> dict[str, float]:
         if isinstance(t, jvm.Object) and "String" in str(t.name)
     ]
 
-    if not string_param_indices:
-        return {
-            "ok": 100.0,
-            "divide by zero": 0.0,
-            "assertion error": 0.0,
-            "out of bounds": 0.0,
-            "null pointer": 0.0,
-            "vulnerable": 0.0,
-            "*": 0.0,
-        }
+    int_param_indices = [
+        idx
+        for idx, t in enumerate(param_types)
+        if isinstance(t, jvm.Int)
+    ]
 
     counts = Counter()
     vulnerable_count = 0
     total = 0
 
-    for payload in SIMPLE_DICTIONARY:
-        # Build arguments - inject payload into string parameters
+    # Test with payloads
+    test_cases = []
+
+    if string_param_indices:
+        # Test each payload (all string params get the same payload)
+        for payload in SIMPLE_DICTIONARY:
+            test_cases.append(("all_payload", [payload] * len(string_param_indices), None))
+
+        # Test with all null
+        test_cases.append(("all_null", [None] * len(string_param_indices), None))
+
+        # For methods with multiple string params, test mixed null/non-null
+        if len(string_param_indices) > 1:
+            # Test each position being null while others are empty string
+            for i in range(len(string_param_indices)):
+                payloads = [""] * len(string_param_indices)
+                payloads[i] = None
+                test_cases.append(("mixed_null", payloads, None))
+
+    # If there are integer parameters, test edge cases
+    if int_param_indices:
+        for int_val in [0, 1, -1, 100, -100]:
+            test_cases.append(("int", [""] * len(string_param_indices) if string_param_indices else [], int_val))
+
+    # If no parameters, just test once
+    if not string_param_indices and not int_param_indices:
+        test_cases.append(("none", [], None))
+
+    for test_type, payloads, int_val in test_cases:
+        # Build arguments
         args = []
+        string_param_counter = 0
+
         for idx, param in enumerate(param_types):
             if idx in string_param_indices:
+                # Use the payload for this specific string parameter
+                if string_param_counter < len(payloads):
+                    payload_val = payloads[string_param_counter]
+                else:
+                    payload_val = ""
+
                 args.append(jvm.Value(
                     jvm.Object(jvm.ClassName.decode("java/lang/String")),
-                    payload
+                    payload_val
                 ))
+                string_param_counter += 1
+
             elif isinstance(param, jvm.Int):
-                args.append(jvm.Value.int(0))
+                if test_type == "int" and int_val is not None:
+                    args.append(jvm.Value.int(int_val))
+                else:
+                    args.append(jvm.Value.int(0))
             elif isinstance(param, jvm.Boolean):
                 args.append(jvm.Value.boolean(False))
             else:
@@ -124,18 +160,21 @@ def analyze_method(method_str: str) -> dict[str, float]:
             interpreter = StringInterpreter(suite, verbose=False, detect_sql=True)
             result, state = interpreter.execute(method, args)
 
-            if result == "sql injection vulnerability":
+            # Normalize result strings
+            result_lower = result.lower() if isinstance(result, str) else str(result).lower()
+
+            if "sql injection" in result_lower or result == "sql injection vulnerability":
                 vulnerable_count += 1
                 counts["vulnerable"] += 1
-            elif result == "error: divide by zero":
-                counts["divide by zero"] += 1
-            elif result == "error: null pointer":
+            elif "null pointer" in result_lower or result == "null pointer":
                 counts["null pointer"] += 1
-            elif result == "error: assertion":
+            elif "divide by zero" in result_lower:
+                counts["divide by zero"] += 1
+            elif "assertion" in result_lower:
                 counts["assertion error"] += 1
-            elif result == "error: out of bounds":
+            elif "out of bounds" in result_lower or "index" in result_lower:
                 counts["out of bounds"] += 1
-            elif result == "timeout":
+            elif "timeout" in result_lower:
                 counts["*"] += 1
             else:
                 if state.vulnerabilities:
@@ -150,7 +189,21 @@ def analyze_method(method_str: str) -> dict[str, float]:
             total += 1
 
         except Exception as e:
-            counts["ok"] += 1
+            error_msg = str(e).lower()
+
+            if 'null' in error_msg or 'nullpointer' in error_msg:
+                counts["null pointer"] += 1
+            elif 'assertion' in error_msg:
+                counts["assertion error"] += 1
+            elif 'bounds' in error_msg or 'index' in error_msg:
+                counts["out of bounds"] += 1
+            elif 'divide' in error_msg or 'division' in error_msg:
+                counts["divide by zero"] += 1
+            elif 'timeout' in error_msg:
+                counts["*"] += 1
+            else:
+                counts["ok"] += 1
+
             total += 1
 
     predictions = {}
@@ -159,6 +212,7 @@ def analyze_method(method_str: str) -> dict[str, float]:
             pct = 100.0 * vulnerable_count / total if total > 0 else 0.0
         else:
             pct = 100.0 * counts.get(query, 0) / total if total > 0 else 0.0
+
         predictions[query] = pct
 
     return predictions
